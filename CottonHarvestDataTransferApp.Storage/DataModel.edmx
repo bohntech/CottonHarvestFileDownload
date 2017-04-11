@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AppDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DataSources">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Organizations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrganizationName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="DataSourceId" Type="int" Nullable="false" />
+          <Property Name="DataSourcePartnerId" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastDownload" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RecentFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrganizationId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DownloadTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Organizations_DataSources">
+          <End Role="DataSources" Type="Self.DataSources" Multiplicity="1" />
+          <End Role="Organizations" Type="Self.Organizations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataSources">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organizations">
+              <PropertyRef Name="DataSourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecentFiles_Organizations">
+          <End Role="Organizations" Type="Self.Organizations" Multiplicity="1" />
+          <End Role="RecentFiles" Type="Self.RecentFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organizations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RecentFiles">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AppDBModelStoreContainer">
+          <EntitySet Name="DataSources" EntityType="Self.DataSources" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Organizations" EntityType="Self.Organizations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecentFiles" EntityType="Self.RecentFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Organizations_DataSources" Association="Self.FK_Organizations_DataSources">
+            <End Role="DataSources" EntitySet="DataSources" />
+            <End Role="Organizations" EntitySet="Organizations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecentFiles_Organizations" Association="Self.FK_RecentFiles_Organizations">
+            <End Role="Organizations" EntitySet="Organizations" />
+            <End Role="RecentFiles" EntitySet="RecentFiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AppDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DataSource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Organizations" Relationship="Self.FK_Organizations_DataSources" FromRole="DataSources" ToRole="Organizations" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="DataSourceId" Type="Int32" Nullable="false" />
+          <Property Name="DataSourcePartnerId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastDownload" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DataSource" Relationship="Self.FK_Organizations_DataSources" FromRole="Organizations" ToRole="DataSources" />
+          <NavigationProperty Name="RecentFiles" Relationship="Self.FK_RecentFiles_Organizations" FromRole="Organizations" ToRole="RecentFiles" />
+        </EntityType>
+        <EntityType Name="RecentFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DownloadTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Organization" Relationship="Self.FK_RecentFiles_Organizations" FromRole="RecentFiles" ToRole="Organizations" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Key" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Organizations_DataSources">
+          <End Role="DataSources" Type="Self.DataSource" Multiplicity="1" />
+          <End Role="Organizations" Type="Self.Organization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataSources">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organizations">
+              <PropertyRef Name="DataSourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecentFiles_Organizations">
+          <End Role="Organizations" Type="Self.Organization" Multiplicity="1" />
+          <End Role="RecentFiles" Type="Self.RecentFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organizations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RecentFiles">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AppDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DataSources" EntityType="Self.DataSource" />
+          <EntitySet Name="Organizations" EntityType="Self.Organization" />
+          <EntitySet Name="RecentFiles" EntityType="Self.RecentFile" />
+          <EntitySet Name="Settings" EntityType="Self.Setting" />
+          <AssociationSet Name="FK_Organizations_DataSources" Association="Self.FK_Organizations_DataSources">
+            <End Role="DataSources" EntitySet="DataSources" />
+            <End Role="Organizations" EntitySet="Organizations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecentFiles_Organizations" Association="Self.FK_RecentFiles_Organizations">
+            <End Role="Organizations" EntitySet="Organizations" />
+            <End Role="RecentFiles" EntitySet="RecentFiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AppDBModelStoreContainer" CdmEntityContainer="AppDBEntities">
+          <EntitySetMapping Name="DataSources">
+            <EntityTypeMapping TypeName="AppDBModel.DataSource">
+              <MappingFragment StoreEntitySet="DataSources">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Organizations">
+            <EntityTypeMapping TypeName="AppDBModel.Organization">
+              <MappingFragment StoreEntitySet="Organizations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="DataSourceId" ColumnName="DataSourceId" />
+                <ScalarProperty Name="DataSourcePartnerId" ColumnName="DataSourcePartnerId" />
+                <ScalarProperty Name="LastDownload" ColumnName="LastDownload" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecentFiles">
+            <EntityTypeMapping TypeName="AppDBModel.RecentFile">
+              <MappingFragment StoreEntitySet="RecentFiles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="DownloadTime" ColumnName="DownloadTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="AppDBModel.Setting">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
