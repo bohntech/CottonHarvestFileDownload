@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using Hammock;
+using System.Net.Http;
 
 namespace CottonHarvestDataTransferApp.Logging
 {
@@ -42,13 +42,23 @@ namespace CottonHarvestDataTransferApp.Logging
         }
                
 
-        public static void Log(RestResponse resp)
+        /*public static void Log(RestResponse resp)
         {
             Log("RESPONSE", string.Format("STATUS CODE: {0}", resp.StatusCode));
 
             if (resp.TimedOut)
             {
                 Log("RESPONSE", "RESPONSE TIMED OUT");
+            }
+        }*/
+
+        public static void Log(HttpResponseMessage resp)
+        {
+            Log("RESPONSE", string.Format("STATUS CODE: {0}", resp.StatusCode));
+
+            if (!string.IsNullOrEmpty(resp.ReasonPhrase))
+            {
+                Log("RESPONSE", resp.ReasonPhrase);
             }
         }
 

@@ -27,34 +27,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CottonHarvestDataTransferApp.Remote.Data;
+using CottonHarvestDataTransferApp.Data;
 
 namespace CottonHarvestDataTransferApp.Remote
 {
+    public delegate void TokenRefreshHandler(Token token);
+
+    public delegate bool TokenExpiredCheckHandler();
+
     /// <summary>
     /// Interface for interacting with remote oAuth dataprovider
     /// </summary>
     public interface IRemoteDataRepository
     {
 
-        void Initialize(string endpoint, RemoteProviderType providerType, string clientAppToken="", string clientAppSecret="", string clientAuthToken="", string clientAuthSecret="" );
+        void SetTokenRefreshHandler(TokenRefreshHandler handler);
 
-        string GetManualAuthUrl();
+        void SetTokenExpiredHandler(TokenExpiredCheckHandler handler);
 
-        bool ExchangeVerifierForCredentials(string verifier, ref string authToken, ref string authSecret);
+        void Initialize(string endpoint, string wellknown, RemoteProviderType providerType, 
+            TokenRefreshHandler refreshHandler, TokenExpiredCheckHandler expireHandler, 
+            string clientAppToken="", string clientAppSecret="", string clientAuthToken="", string clientAuthSecret="" );
 
-        void SetAuthData(string authToken, string authSecret);
+        //string GetManualAuthUrl();
 
-        string TestConnection();
+        //bool ExchangeVerifierForCredentials(string verifier, ref string authToken, ref string authSecret);
 
-        List<Partner> FetchAllPartners(List<OrgFileETag> fileETags, string[] restrictToOrgIds);
+        void SetAuthData(string accessToken, string refreshToken);
 
-        string RequestPartnerPermission(string email, string myOrgId);
+        Task<string> TestConnection();
 
-        string GetRemoteIDFromPartnerLink(string link);
+        Task<List<Partner>> FetchAllPartners(List<OrgFileETag> fileETags, string[] restrictToOrgIds);
 
-        List<OrgFileETag> DownloadOrganizationFiles(List<OrgFileETag> fileETags, string filePath, string[] orgIds, string[] downloadedFileIds, Action<FileDownloadedResult> callback, Action<FileDownloadProgress> progressCallback, Action<FileDownloadedResult> errorCallback);
+        Task<string> RequestPartnerPermission(string email, string myOrgId);
 
-        List<UserOrganization> GetMyOrganizations();
+        Task<string> GetRemoteIDFromPartnerLink(string link);
+
+        Task<List<OrgFileETag>> DownloadOrganizationFiles(List<OrgFileETag> fileETags, string filePath, string[] orgIds, string[] downloadedFileIds, Action<FileDownloadedResult> callback, Action<FileDownloadProgress> progressCallback, Action<FileDownloadedResult> errorCallback);
+
+        Task<List<UserOrganization>> GetMyOrganizations();
 
         void EmptyAllCacheItems();
     }

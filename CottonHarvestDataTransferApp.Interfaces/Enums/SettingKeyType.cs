@@ -35,8 +35,13 @@ namespace CottonHarvestDataTransferApp.Data
         DownloadFrequencyTypeKey = 2,
         DailyDownloadTimeKey = 3,
         HourlyDownloadTimeKey = 4,
-        JDAuthTokenKey = 5,
-        JDAuthSecretKey = 6,
-        LastDownload = 7
+        //JDAuthTokenKey = 5,
+        //JDAuthSecretKey = 6,
+        LastDownload = 7,
+        JDAccessToken = 8,
+        JDRefreshToken = 9,
+        JDAccessTokenExpires=10,
+        JDCredentialDateTime=11,
+        LastUserID=12
     }
 }

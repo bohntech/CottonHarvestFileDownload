@@ -107,20 +107,19 @@ namespace CottonHarvestDataTransferApp.UserControls
         {
             if (MessageBox.Show("Are you sure you want to import partnerships from your MyJohnDeere account?  Existing partners will be updated and no partners will be deleted.", "Import Partners", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                List<Partner> results = null;
-                string message = "";
-                ImportStatus status = ImportStatus.SUCCESS;
+                List<Partner> results = null;                
+                ImportPartnerResult importResult = new ImportPartnerResult();
                 showLoadingMessage("Retrieving partnership data");
 
-                await Task.Run(() => { status = DataHelper.ImportPartners(results, ref message, remoteDataRepository, true); });
+                await Task.Run(async () => { importResult = await DataHelper.ImportPartners(results, remoteDataRepository, true); });
 
-                if (status == ImportStatus.SUCCESS)
+                if (importResult.Status == ImportStatus.SUCCESS)
                 {
                     await loadPartnerGrid();
                 }
                 else
                 {
-                    MessageBox.Show(message);
+                    MessageBox.Show(importResult.Message);
                 }
 
                 hideLoadingMessage();
@@ -155,9 +154,9 @@ namespace CottonHarvestDataTransferApp.UserControls
             }
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
-            partnerForm.SetRemoteRepository(remoteDataRepository);
+            await partnerForm.SetRemoteRepository(remoteDataRepository);
             if (dgPartners.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Please select a partner to edit.");
@@ -176,9 +175,9 @@ namespace CottonHarvestDataTransferApp.UserControls
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {            
-            partnerForm.SetRemoteRepository(remoteDataRepository);
+            await partnerForm.SetRemoteRepository(remoteDataRepository);
             partnerForm.ShowAdd();
         }
         #endregion

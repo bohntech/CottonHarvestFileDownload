@@ -191,7 +191,7 @@ namespace CottonHarvestDataTransferApp.UserControls
                 //kick off process to download all files
                 List<Partner> results = null;
                 string message = "";
-                ImportStatus status = ImportStatus.SUCCESS;
+                ImportPartnerResult importResult = new ImportPartnerResult();
 
                 //first check for new partner relationships
                 this.Invoke((MethodInvoker)delegate
@@ -200,7 +200,7 @@ namespace CottonHarvestDataTransferApp.UserControls
                     lblStatusValue.ForeColor = Color.Green;
                 });
 
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     try
                     {
@@ -212,7 +212,8 @@ namespace CottonHarvestDataTransferApp.UserControls
                             dp.SaveChanges();
                         }
 
-                        status = DataHelper.ImportPartners(results, ref message, remoteDataRepository, false);
+                        //TODO: NEED A WAY TO PROPAGATE MESSAGE BACK TO SCREEN
+                        importResult = await DataHelper.ImportPartners(results, remoteDataRepository, false);
                     }
                     catch (Exception exc)
                     {
@@ -222,7 +223,7 @@ namespace CottonHarvestDataTransferApp.UserControls
                 });
 
                 
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     try
                     {
@@ -251,7 +252,7 @@ namespace CottonHarvestDataTransferApp.UserControls
                             }
 
                             Logger.Log("INFO", "Start download all files.");
-                            var updatedETags = remoteDataRepository.DownloadOrganizationFiles(savedETags, downloadFolder, orgIds, fileIds, FileDownloaded, DownloadProgress, FileDownloadError);
+                            var updatedETags = await remoteDataRepository.DownloadOrganizationFiles(savedETags, downloadFolder, orgIds, fileIds, FileDownloaded, DownloadProgress, FileDownloadError);
                             Logger.Log("INFO", "Finished download all files.");
                             
                             //update organization record with new file eTags
@@ -317,12 +318,12 @@ namespace CottonHarvestDataTransferApp.UserControls
         {
             bool connected = false;
             lblStatusValue.Text = "Checking connection...";
-            await Task.Run(() => {
+            await Task.Run(async () => {
                 System.Threading.Thread.Sleep(1500);
                 using (IUnitOfWorkDataProvider p = AppStorage.GetUnitOfWorkDataProvider())
                 {
                     //if we have credentials test connection                   
-                    connected = (remoteDataRepository.TestConnection() != string.Empty);                    
+                    connected = ((await remoteDataRepository.TestConnection()) != string.Empty);                    
                 }
             });
 

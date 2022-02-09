@@ -35,11 +35,8 @@
             this.lblApplicationLinkedText = new System.Windows.Forms.Label();
             this.pnlConnectionSettingsVerifyCode = new System.Windows.Forms.Panel();
             this.btnExit = new System.Windows.Forms.Button();
-            this.btnGetVerifierCode = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.btnSubmitVerificationCode = new System.Windows.Forms.Button();
-            this.tbVerificationCode = new System.Windows.Forms.TextBox();
-            this.lblEnterVerificationCodeLabel = new System.Windows.Forms.Label();
             this.pnlConnectionSettingsLinkAccount = new System.Windows.Forms.Panel();
             this.btnConnectionsSettingsLinkAccount = new System.Windows.Forms.Button();
             this.lblConnectionInstructionsText = new System.Windows.Forms.Label();
@@ -49,8 +46,12 @@
             this.btnRetry = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlLoading = new System.Windows.Forms.Panel();
+            this.btnStartOver = new System.Windows.Forms.Button();
             this.lblLoadingMessage = new System.Windows.Forms.Label();
             this.pictureLoading = new System.Windows.Forms.PictureBox();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            this.btnConnections = new System.Windows.Forms.Button();
+            this.lblPermissions = new System.Windows.Forms.Label();
             this.pnlConnectionSettingsConnected.SuspendLayout();
             this.pnlConnectionSettingsVerifyCode.SuspendLayout();
             this.pnlConnectionSettingsLinkAccount.SuspendLayout();
@@ -59,14 +60,17 @@
             this.pnlNoNetwork.SuspendLayout();
             this.pnlLoading.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLoading)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlConnectionSettingsConnected
             // 
+            this.pnlConnectionSettingsConnected.Controls.Add(this.lblPermissions);
+            this.pnlConnectionSettingsConnected.Controls.Add(this.btnConnections);
             this.pnlConnectionSettingsConnected.Controls.Add(this.btnConnectionSettingsLinkDifferentAccount);
             this.pnlConnectionSettingsConnected.Controls.Add(this.lblApplicationLinkedText);
             this.pnlConnectionSettingsConnected.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlConnectionSettingsConnected.Location = new System.Drawing.Point(0, 362);
+            this.pnlConnectionSettingsConnected.Location = new System.Drawing.Point(0, 307);
             this.pnlConnectionSettingsConnected.Margin = new System.Windows.Forms.Padding(4);
             this.pnlConnectionSettingsConnected.Name = "pnlConnectionSettingsConnected";
             this.pnlConnectionSettingsConnected.Size = new System.Drawing.Size(775, 128);
@@ -75,7 +79,7 @@
             // 
             // btnConnectionSettingsLinkDifferentAccount
             // 
-            this.btnConnectionSettingsLinkDifferentAccount.Location = new System.Drawing.Point(19, 63);
+            this.btnConnectionSettingsLinkDifferentAccount.Location = new System.Drawing.Point(19, 69);
             this.btnConnectionSettingsLinkDifferentAccount.Margin = new System.Windows.Forms.Padding(4);
             this.btnConnectionSettingsLinkDifferentAccount.Name = "btnConnectionSettingsLinkDifferentAccount";
             this.btnConnectionSettingsLinkDifferentAccount.Size = new System.Drawing.Size(197, 43);
@@ -87,7 +91,7 @@
             // lblApplicationLinkedText
             // 
             this.lblApplicationLinkedText.AutoSize = true;
-            this.lblApplicationLinkedText.Location = new System.Drawing.Point(16, 26);
+            this.lblApplicationLinkedText.Location = new System.Drawing.Point(16, 22);
             this.lblApplicationLinkedText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblApplicationLinkedText.Name = "lblApplicationLinkedText";
             this.lblApplicationLinkedText.Size = new System.Drawing.Size(369, 17);
@@ -97,23 +101,20 @@
             // pnlConnectionSettingsVerifyCode
             // 
             this.pnlConnectionSettingsVerifyCode.Controls.Add(this.btnExit);
-            this.pnlConnectionSettingsVerifyCode.Controls.Add(this.btnGetVerifierCode);
             this.pnlConnectionSettingsVerifyCode.Controls.Add(this.label4);
             this.pnlConnectionSettingsVerifyCode.Controls.Add(this.btnSubmitVerificationCode);
-            this.pnlConnectionSettingsVerifyCode.Controls.Add(this.tbVerificationCode);
-            this.pnlConnectionSettingsVerifyCode.Controls.Add(this.lblEnterVerificationCodeLabel);
             this.pnlConnectionSettingsVerifyCode.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlConnectionSettingsVerifyCode.Location = new System.Drawing.Point(0, 149);
             this.pnlConnectionSettingsVerifyCode.Margin = new System.Windows.Forms.Padding(4);
             this.pnlConnectionSettingsVerifyCode.Name = "pnlConnectionSettingsVerifyCode";
-            this.pnlConnectionSettingsVerifyCode.Size = new System.Drawing.Size(775, 213);
+            this.pnlConnectionSettingsVerifyCode.Size = new System.Drawing.Size(775, 158);
             this.pnlConnectionSettingsVerifyCode.TabIndex = 6;
             this.pnlConnectionSettingsVerifyCode.Visible = false;
             // 
             // btnExit
             // 
             this.btnExit.CausesValidation = false;
-            this.btnExit.Location = new System.Drawing.Point(233, 147);
+            this.btnExit.Location = new System.Drawing.Point(230, 85);
             this.btnExit.Margin = new System.Windows.Forms.Padding(4);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(197, 43);
@@ -121,17 +122,6 @@
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
-            // btnGetVerifierCode
-            // 
-            this.btnGetVerifierCode.CausesValidation = false;
-            this.btnGetVerifierCode.Location = new System.Drawing.Point(305, 104);
-            this.btnGetVerifierCode.Name = "btnGetVerifierCode";
-            this.btnGetVerifierCode.Size = new System.Drawing.Size(208, 26);
-            this.btnGetVerifierCode.TabIndex = 7;
-            this.btnGetVerifierCode.Text = "Get Verifier Code";
-            this.btnGetVerifierCode.UseVisualStyleBackColor = true;
-            this.btnGetVerifierCode.Click += new System.EventHandler(this.btnGetVerifierCode_Click);
             // 
             // label4
             // 
@@ -145,34 +135,14 @@
             // 
             // btnSubmitVerificationCode
             // 
-            this.btnSubmitVerificationCode.Location = new System.Drawing.Point(19, 147);
+            this.btnSubmitVerificationCode.Location = new System.Drawing.Point(16, 85);
             this.btnSubmitVerificationCode.Margin = new System.Windows.Forms.Padding(4);
             this.btnSubmitVerificationCode.Name = "btnSubmitVerificationCode";
             this.btnSubmitVerificationCode.Size = new System.Drawing.Size(197, 43);
             this.btnSubmitVerificationCode.TabIndex = 4;
-            this.btnSubmitVerificationCode.Text = "Connect";
+            this.btnSubmitVerificationCode.Text = "Sign In";
             this.btnSubmitVerificationCode.UseVisualStyleBackColor = true;
             this.btnSubmitVerificationCode.Click += new System.EventHandler(this.btnSubmitVerificationCode_Click);
-            // 
-            // tbVerificationCode
-            // 
-            this.tbVerificationCode.Location = new System.Drawing.Point(20, 105);
-            this.tbVerificationCode.Margin = new System.Windows.Forms.Padding(4);
-            this.tbVerificationCode.Name = "tbVerificationCode";
-            this.tbVerificationCode.Size = new System.Drawing.Size(264, 23);
-            this.tbVerificationCode.TabIndex = 5;
-            this.tbVerificationCode.Validating += new System.ComponentModel.CancelEventHandler(this.tbVerificationCode_Validating);
-            // 
-            // lblEnterVerificationCodeLabel
-            // 
-            this.lblEnterVerificationCodeLabel.AutoSize = true;
-            this.lblEnterVerificationCodeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEnterVerificationCodeLabel.Location = new System.Drawing.Point(17, 84);
-            this.lblEnterVerificationCodeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblEnterVerificationCodeLabel.Name = "lblEnterVerificationCodeLabel";
-            this.lblEnterVerificationCodeLabel.Size = new System.Drawing.Size(103, 17);
-            this.lblEnterVerificationCodeLabel.TabIndex = 4;
-            this.lblEnterVerificationCodeLabel.Text = "Verifier Code";
             // 
             // pnlConnectionSettingsLinkAccount
             // 
@@ -220,7 +190,7 @@
             this.pnlNoNetwork.Controls.Add(this.btnRetry);
             this.pnlNoNetwork.Controls.Add(this.label1);
             this.pnlNoNetwork.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNoNetwork.Location = new System.Drawing.Point(0, 490);
+            this.pnlNoNetwork.Location = new System.Drawing.Point(0, 435);
             this.pnlNoNetwork.Name = "pnlNoNetwork";
             this.pnlNoNetwork.Size = new System.Drawing.Size(775, 106);
             this.pnlNoNetwork.TabIndex = 8;
@@ -250,18 +220,31 @@
             // 
             // pnlLoading
             // 
+            this.pnlLoading.Controls.Add(this.btnStartOver);
             this.pnlLoading.Controls.Add(this.lblLoadingMessage);
             this.pnlLoading.Controls.Add(this.pictureLoading);
             this.pnlLoading.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlLoading.Location = new System.Drawing.Point(0, 596);
+            this.pnlLoading.Location = new System.Drawing.Point(0, 541);
             this.pnlLoading.Name = "pnlLoading";
-            this.pnlLoading.Size = new System.Drawing.Size(775, 150);
+            this.pnlLoading.Size = new System.Drawing.Size(775, 189);
             this.pnlLoading.TabIndex = 9;
+            this.pnlLoading.Visible = false;
+            // 
+            // btnStartOver
+            // 
+            this.btnStartOver.Location = new System.Drawing.Point(290, 12);
+            this.btnStartOver.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStartOver.Name = "btnStartOver";
+            this.btnStartOver.Size = new System.Drawing.Size(197, 33);
+            this.btnStartOver.TabIndex = 10;
+            this.btnStartOver.Text = "Retry Login";
+            this.btnStartOver.UseVisualStyleBackColor = true;
+            this.btnStartOver.Click += new System.EventHandler(this.btnStartOver_Click);
             // 
             // lblLoadingMessage
             // 
             this.lblLoadingMessage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblLoadingMessage.Location = new System.Drawing.Point(0, 122);
+            this.lblLoadingMessage.Location = new System.Drawing.Point(0, 161);
             this.lblLoadingMessage.Name = "lblLoadingMessage";
             this.lblLoadingMessage.Size = new System.Drawing.Size(775, 28);
             this.lblLoadingMessage.TabIndex = 1;
@@ -276,10 +259,41 @@
             this.pictureLoading.InitialImage = null;
             this.pictureLoading.Location = new System.Drawing.Point(0, 0);
             this.pictureLoading.Name = "pictureLoading";
-            this.pictureLoading.Size = new System.Drawing.Size(775, 150);
+            this.pictureLoading.Size = new System.Drawing.Size(775, 189);
             this.pictureLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureLoading.TabIndex = 0;
             this.pictureLoading.TabStop = false;
+            // 
+            // fileSystemWatcher
+            // 
+            this.fileSystemWatcher.EnableRaisingEvents = true;
+            this.fileSystemWatcher.Filter = "AuthResponse.txt";
+            this.fileSystemWatcher.SynchronizingObject = this;
+            this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Created);
+            // 
+            // btnConnections
+            // 
+            this.btnConnections.Location = new System.Drawing.Point(230, 69);
+            this.btnConnections.Margin = new System.Windows.Forms.Padding(4);
+            this.btnConnections.Name = "btnConnections";
+            this.btnConnections.Size = new System.Drawing.Size(216, 43);
+            this.btnConnections.TabIndex = 5;
+            this.btnConnections.Text = "Set Permissions";
+            this.btnConnections.UseVisualStyleBackColor = true;
+            this.btnConnections.Click += new System.EventHandler(this.btnConnections_Click);
+            // 
+            // lblPermissions
+            // 
+            this.lblPermissions.AutoSize = true;
+            this.lblPermissions.ForeColor = System.Drawing.Color.Red;
+            this.lblPermissions.Location = new System.Drawing.Point(15, 43);
+            this.lblPermissions.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPermissions.Name = "lblPermissions";
+            this.lblPermissions.Size = new System.Drawing.Size(723, 17);
+            this.lblPermissions.TabIndex = 6;
+            this.lblPermissions.Text = "Access has not been granted to one or more partners.   Please click the set permission" +
+    "s button to review access.";
+            this.lblPermissions.Click += new System.EventHandler(this.label2_Click);
             // 
             // ConnectionSettings
             // 
@@ -294,17 +308,17 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ConnectionSettings";
-            this.Size = new System.Drawing.Size(775, 746);            
+            this.Size = new System.Drawing.Size(775, 746);
             this.pnlConnectionSettingsConnected.ResumeLayout(false);
             this.pnlConnectionSettingsConnected.PerformLayout();
             this.pnlConnectionSettingsVerifyCode.ResumeLayout(false);
-            this.pnlConnectionSettingsVerifyCode.PerformLayout();
             this.pnlConnectionSettingsLinkAccount.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.formErrorProvider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.pnlNoNetwork.ResumeLayout(false);
             this.pnlLoading.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureLoading)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -316,13 +330,10 @@
         private System.Windows.Forms.Label lblApplicationLinkedText;
         private System.Windows.Forms.Panel pnlConnectionSettingsVerifyCode;
         private System.Windows.Forms.Button btnSubmitVerificationCode;
-        private System.Windows.Forms.TextBox tbVerificationCode;
-        private System.Windows.Forms.Label lblEnterVerificationCodeLabel;
         private System.Windows.Forms.Panel pnlConnectionSettingsLinkAccount;
         private System.Windows.Forms.Button btnConnectionsSettingsLinkAccount;
         private System.Windows.Forms.Label lblConnectionInstructionsText;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button btnGetVerifierCode;
         private System.Windows.Forms.ErrorProvider formErrorProvider;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Panel pnlNoNetwork;
@@ -332,5 +343,9 @@
         private System.Windows.Forms.Panel pnlLoading;
         private System.Windows.Forms.Label lblLoadingMessage;
         private System.Windows.Forms.PictureBox pictureLoading;
+        private System.IO.FileSystemWatcher fileSystemWatcher;
+        private System.Windows.Forms.Button btnStartOver;
+        private System.Windows.Forms.Button btnConnections;
+        private System.Windows.Forms.Label lblPermissions;
     }
 }

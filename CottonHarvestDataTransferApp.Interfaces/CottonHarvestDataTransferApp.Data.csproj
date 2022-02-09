@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\DataSource.cs" />
+    <Compile Include="Classes\JDeere.cs" />
     <Compile Include="Classes\OutputFile.cs" />
     <Compile Include="Enums\DownloadIntervalType.cs" />
     <Compile Include="Enums\SettingKeyType.cs" />

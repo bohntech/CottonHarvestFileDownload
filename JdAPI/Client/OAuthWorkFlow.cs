@@ -27,17 +27,27 @@ namespace JdAPI.Client
                 return authUri;
             }
         }
+              
+
+        private string GetBase64EncodedClientCredentials()
+        {
+            byte[] credentialBytes = Encoding.UTF8.GetBytes($"{ApiCredentials.APP_ID}:{ApiCredentials.APP_KEY}");
+            return Convert.ToBase64String(credentialBytes);
+        }
 
         public void retrieveApiCatalogToEstablishOAuthProviderDetails(string endPoint)
         {
-            Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.ProtectedResource, null, null, null, null);
+            //Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.ProtectedResource, null, null, null, null);
           
             Hammock.RestClient client = new Hammock.RestClient()
             {
                 Authority = endPoint,
-                Credentials = credentials
+                //Credentials = credentials
             };
-            
+
+            client.AddHeader("Accept", "application/json");
+            client.AddHeader("authorization", $"Basic {GetBase64EncodedClientCredentials()}");
+
             Hammock.RestRequest request = new Hammock.RestRequest()
             {
                 Path = ""
@@ -60,28 +70,37 @@ namespace JdAPI.Client
         public static Dictionary<String, Link> linksFrom(Resource res) {
                 
              Dictionary<String, Link> map = new Dictionary<String, Link>();
-             
-             foreach(Link link in res.links) {
-                 map.Add(link.rel, link);
-             }
+
+            if (res != null && res.links != null)
+            {
+                foreach (Link link in res.links)
+                {
+                    map.Add(link.rel, link);
+                }
+            }
              return map;
         }
 
-        public void getRequestToken() 
+        /*public void getRequestToken() 
          {
-            Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.RequestToken, null, null, null, "oob");
+            //Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.RequestToken, null, null, null, "oob");
            
             
              Hammock.RestClient client = new Hammock.RestClient()
             {
                 Authority = "",
-                Credentials = credentials
+                //Credentials = credentials
             };
+
+            client.AddHeader("Accept", "application/json");
+            client.AddHeader("authorization", $"Basic {GetBase64EncodedClientCredentials()}");
 
             Hammock.RestRequest request = new Hammock.RestRequest()
             {
                 Path = links["oauthRequestToken"].uri
             };
+
+
 
             using (Hammock.RestResponse response = client.Request(request))
             {
@@ -93,27 +112,30 @@ namespace JdAPI.Client
                 reqToken = reqToken.Split('=')[1];
                 reqSecret = response.Content.Split('&')[1].Split('=')[1];
             }
-        }
+        }*/
 
         public void SetVerifier(string _verifier)
         {
             verifier = _verifier;
         }
 
-        public bool exchangeRequestTokenForAccessToken(ref string oauthToken, ref string oauthTokenSecret) {
+        /*public bool exchangeRequestTokenForAccessToken(ref string oauthToken, ref string oauthTokenSecret) {
             try
             {
                 //empty cache
                 CacheManager.Empty();
 
-                Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.AccessToken, reqToken, HttpUtility.UrlDecode(reqSecret), verifier, null);
+                //Hammock.Authentication.OAuth.OAuthCredentials credentials = createOAuthCredentials(OAuthType.AccessToken, reqToken, HttpUtility.UrlDecode(reqSecret), verifier, null);
 
 
                 Hammock.RestClient client = new Hammock.RestClient()
                 {
-                    Authority = "",
-                    Credentials = credentials
+                    Authority = ""//,
+                    //Credentials = credentials
                 };
+
+                client.AddHeader("Accept", "application/json");
+                client.AddHeader("authorization", $"Basic {GetBase64EncodedClientCredentials()}");
 
                 Hammock.RestRequest request = new Hammock.RestRequest()
                 {
@@ -141,20 +163,20 @@ namespace JdAPI.Client
             {
                 return false;
             }
-        }
+        }*/
 
         private static String cleanAuthorizationUri(String uri) {
             return uri.Substring(0, uri.IndexOf("?"));
         }
 
-        public static Hammock.Authentication.OAuth.OAuthCredentials createOAuthCredentials(OAuthType type, String strToken, String strSecret, String strVerifier, String strCallBack ){
+        /*public static Hammock.Authentication.OAuth.OAuthCredentials createOAuthCredentials(OAuthType type, String strToken, String strSecret, String strVerifier, String strCallBack ){
             Hammock.Authentication.OAuth.OAuthCredentials credentials = new Hammock.Authentication.OAuth.OAuthCredentials()
             {
                 Type =type,
                 SignatureMethod = Hammock.Authentication.OAuth.OAuthSignatureMethod.HmacSha1,
                 ParameterHandling = Hammock.Authentication.OAuth.OAuthParameterHandling.HttpAuthorizationHeader,
-                ConsumerKey = JdAPI.Client.ApiCredentials.CLIENT.key,
-                ConsumerSecret = JdAPI.Client.ApiCredentials.CLIENT.secret,
+                //ConsumerKey = JdAPI.Client.ApiCredentials.CLIENT.key,
+                //ConsumerSecret = JdAPI.Client.ApiCredentials.CLIENT.secret,
                 Token = strToken,
                 TokenSecret = strSecret,
                 Verifier = strVerifier,
@@ -162,6 +184,6 @@ namespace JdAPI.Client
             };
             return credentials;
 
-        }
+        }*/
     }
 }

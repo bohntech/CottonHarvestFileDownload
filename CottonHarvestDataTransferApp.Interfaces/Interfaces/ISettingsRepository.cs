@@ -36,5 +36,10 @@ namespace CottonHarvestDataTransferApp.Data
     {
         void UpdateSettingWithKey(SettingKeyType keyType, string value);
         string GetDownloadFolder();
+        DateTime? GetLastJohnDeereLoginDateTime();
+        DateTime GetAccessTokenExpiresUTC();
+        void UpsertSettingWithKey(SettingKeyType key, string value);
+
+        string GetAsString(SettingKeyType key);
     }
 }

@@ -11,6 +11,10 @@ using System.Compat.Web;
 using JdAPI.Client.Rest;
 using Newtonsoft.Json;
 using CottonHarvestDataTransferApp.Logging;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
+using System.Configuration;
 
 namespace JdAPI.Client
 {
@@ -19,6 +23,7 @@ namespace JdAPI.Client
         #region private properties
         private Dictionary<String, Link> apiCataloglinks;
         private Dictionary<string, ETag> _organizationFileETags = null;
+        private string baseUrl = "";
         #endregion
 
         #region private methods
@@ -29,22 +34,32 @@ namespace JdAPI.Client
             return result;
         }
 
-        private Hammock.RestClient getRestClient()
+        private static async Task<T> DeserialiseAsync<T>(HttpContent content)
         {
-            Hammock.Authentication.OAuth.OAuthCredentials credentials = OAuthWorkFlow.createOAuthCredentials(OAuthType.ProtectedResource, ApiCredentials.TOKEN.token,
-                ApiCredentials.TOKEN.secret, null, null);
+            DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(T));
+            T result = (T)deserializer.ReadObject(await content.ReadAsStreamAsync());
+            return result;
+        }
+        
 
-            Hammock.RestClient client = new Hammock.RestClient()
-            {
-                Authority = "",
-                Credentials = credentials,
-                Timeout = new TimeSpan(0, 0, 30)
-            };
+        private HttpClient getHttpClient()
+        {
+            var client = new HttpClient();
+            //var tokenSetting = dp.Settings.FindSingle(x => x.Key == SettingKeyType.JDAccessToken);
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.deere.axiom.v3+json"));
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {GetBase64EncodedClientCredentials()}");
+
             return client;
-
+        }
+               
+        private string GetBase64EncodedClientCredentials()
+        {
+            byte[] credentialBytes = Encoding.UTF8.GetBytes($"{ApiCredentials.APP_ID}:{ApiCredentials.APP_KEY}");
+            return Convert.ToBase64String(credentialBytes);
         }
 
-        private Organization getOrganization(Link orgLink, bool allowFetchFromCache)
+        private async Task<Organization> getOrganization(Link orgLink, bool allowFetchFromCache)
         {
             Organization org = null;
 
@@ -55,143 +70,94 @@ namespace JdAPI.Client
 
             if (org == null)
             {
-                Hammock.RestClient client = getRestClient();
-                Hammock.RestRequest request = new Hammock.RestRequest()
-                {
-                    Path = orgLink.uri
-                };
-                request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-
                 Logger.Log("RESOURCE", "getOrganization");
-
-                using (Hammock.RestResponse response = client.Request(request))
-                {
-                    org = PartnershipWorkflow.Deserialise<Organization>(response.ContentStream);                 
-                    Logger.Log(response);
-                    CacheManager.AddCacheItem(orgLink.uri, org, 5);
-                }
+                var response = await SecuredApiGetRequest(orgLink.uri);
+                Logger.Log(response);
+                org = await PartnershipWorkflow.DeserialiseAsync<Organization>(response.Content);
+                CacheManager.AddCacheItem(orgLink.uri, org, 5);               
             }
             
             return org;
         }
 
-        private Resource getPartnership(string partnerLink)
-        {
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = partnerLink
-            };
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-            Logger.Log("RESOURCE", "getPartnership");
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Logger.Log(response);
-                Resource org = PartnershipWorkflow.Deserialise<Resource>(response.ContentStream);
-                return org;
-            }
+        private async Task<Resource> getPartnership(string partnerLink)
+        {                       
+            var response = await SecuredApiGetRequest(partnerLink);
+            Logger.Log(response);
+            Resource org = await PartnershipWorkflow.DeserialiseAsync<Resource>(response.Content);
+            return org;
         }
 
-        private List<Partnership> getPartnerShipsList(string uri)
+        private async Task<List<Partnership>> getPartnerShipsList(string uri)
         {
             List<Partnership> partnerShips = (List<Partnership>) CacheManager.GetCacheItem("partnership_list");
 
             if (partnerShips == null || partnerShips.Count == 0)
             {
-                partnerShips = getList<Partnership>(uri);
+                partnerShips = await getList<Partnership>(uri);
                 CacheManager.AddCacheItem("partnership_list", partnerShips, 5);
             }
 
             return partnerShips;
         }
 
-        private List<Permission> getPermissions(string link)
-        {
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = link
-            };
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
+        private async Task<List<Permission>> getPermissions(string link)
+        {            
             Logger.Log("RESOURCE", "getPermissions");
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Logger.Log(response);
-                Permissions p = PartnershipWorkflow.Deserialise<Permissions>(response.ContentStream);
-                return p.permissions;
-            }
+            var response = await SecuredApiGetRequest(link);            
+            Logger.Log(response);
+            Permissions p = await PartnershipWorkflow.DeserialiseAsync<Permissions>(response.Content);
+            return p.permissions;
         }
 
-        public Resource getResource(string resourceLink)
-        {
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = resourceLink
-            };
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
+        public async Task<Resource> getResource(string resourceLink)
+        {            
             Logger.Log("RESOURCE", "getResource");
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Resource r = PartnershipWorkflow.Deserialise<Resource>(response.ContentStream);
-                Logger.Log(response);
-                return r;
-            }
+            var response = await SecuredApiGetRequest(resourceLink);
+            Logger.Log(response);            
+            Resource r = await PartnershipWorkflow.DeserialiseAsync<Resource>(response.Content);            
+            return r;
         }
 
-        public Resource getResourceFromCache(string resourceLink)
+        public async Task<Resource> getResourceFromCache(string resourceLink)
         {
             Resource r = (Resource) CacheManager.GetCacheItem(resourceLink);
 
             if (r == null)
             {
-                Hammock.RestClient client = getRestClient();
-                Hammock.RestRequest request = new Hammock.RestRequest()
-                {
-                    Path = resourceLink
-                };
-                request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
                 Logger.Log("RESOURCE", "getResourceFromCache");
-                using (Hammock.RestResponse response = client.Request(request))
-                {
-                    r = PartnershipWorkflow.Deserialise<Resource>(response.ContentStream);
-                    Logger.Log(response);
-                    CacheManager.AddCacheItem(resourceLink, r, 5);
-                }
+
+                var response = await SecuredApiGetRequest(resourceLink);
+                r = await PartnershipWorkflow.DeserialiseAsync<Resource>(response.Content);
+                Logger.Log(response);
+                CacheManager.AddCacheItem(resourceLink, r, 5);
             }
             return r;
         }
 
-        public string getOrgIdForCompletedPartnership(string resourceLink)
+        public async Task<string> getOrgIdForCompletedPartnership(string resourceLink)
         {
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = resourceLink
-            };
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
+
             Logger.Log("RESOURCE", "getOrgIdForCompletePartnership");
 
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Logger.Log(response);
-                //Resource r = Download.Deserialise<Resource>(response.ContentStream);
+            Resource p = await getPartnership(resourceLink);
+            var partnershipLinks = OAuthWorkFlow.linksFrom(p);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Moved) //request is completed
-                {
-                    string link = response.Headers["Location"];
-                    Resource p = getPartnership(link);
-                    var partnershipLinks = OAuthWorkFlow.linksFrom(p);
-                    return this.ExtractTokenFromLink(partnershipLinks["fromPartnership"].uri);
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }       
+
+            string link =  this.ExtractTokenFromLink(partnershipLinks["fromPartnership"].uri);
+
+            if (link.ToLower().IndexOf("mailto:") >= 0) //partnership is incomplete
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return link;
+            }           
+
         }
 
-        private List<DataContracts.File> getPartnerFileLinks(string uri, string orgId, bool fetchNewFiles)
+        private async Task<List<DataContracts.File>> getPartnerFileLinks(string uri, string orgId, bool fetchNewFiles)
         {
             orgId = orgId.ToLower();
             List<DataContracts.File> files = null;
@@ -207,15 +173,18 @@ namespace JdAPI.Client
                 if (_organizationFileETags.ContainsKey(orgId))
                 {
                     tag = _organizationFileETags[orgId];                    
-                    files = getListWithETag<DataContracts.File>(uri, ref tag);                    
+                    var result = await getListWithETag<DataContracts.File>(uri, tag);
+                    files = result.Resources;
                     tag.CreatedDate = DateTime.Now;
+                    tag.Tag = result.Tag;
                     _organizationFileETags[orgId] = tag;
                 }
                 else
                 {
                     tag.Tag = string.Empty;
-                    files = getListWithETag<DataContracts.File>(uri, ref tag);
-
+                    var result = await getListWithETag<DataContracts.File>(uri, tag);
+                    files = result.Resources;
+                    tag.Tag = result.Tag;
                     if (!string.IsNullOrEmpty(tag.Tag))
                     {
                         tag.CreatedDate = DateTime.Now;
@@ -225,14 +194,14 @@ namespace JdAPI.Client
             }
             else
             {
-                getList<DataContracts.File>(uri);
+                await getList<DataContracts.File>(uri);
             }            
             
             return files;
         }
 
         
-        private void fillPartnershipTree(Partnership p, bool fetchNewFiles)
+        private async Task fillPartnershipTree(Partnership p, bool fetchNewFiles)
         {
             //get fromPartnership            
             Dictionary<String, Link> partnershipLinks = OAuthWorkFlow.linksFrom(p);
@@ -244,108 +213,108 @@ namespace JdAPI.Client
             {             
 
                 if (!fromPartnerShipLink.uri.ToLower().StartsWith("mailto:")) {
-                    p.FromOrg = getOrganization(fromPartnerShipLink, true);
+                    p.FromOrg = await getOrganization(fromPartnerShipLink, true);
                 }
 
                 if (!toPartnerShipLink.uri.ToLower().StartsWith("mailto:"))
                 {
-                    p.ToOrg = getOrganization(toPartnerShipLink, true);
+                    p.ToOrg = await getOrganization(toPartnerShipLink, true);
                 }
 
                 if (partnershipLinks.ContainsKey("contactInvitation"))
                 {
-                    p.ContactInvite = getResourceFromCache(partnershipLinks["contactInvitation"].uri);
+                    p.ContactInvite = await getResourceFromCache(partnershipLinks["contactInvitation"].uri);
                 }
-           
-                /*if (partnershipLinks.ContainsKey("permissions"))
-                {
-                    p.Permissions = getPermissions(partnershipLinks["permissions"].uri);
-                }*/
 
-                var orgLinks = OAuthWorkFlow.linksFrom(p.FromOrg);
-                if (orgLinks.ContainsKey("files"))
+             
+
+                if (p.FromOrg != null && !string.IsNullOrEmpty(p.FromOrg.id)) //ADDED MB
                 {
+                    var orgLinks = OAuthWorkFlow.linksFrom(p.FromOrg);
+                    if (orgLinks.ContainsKey("self"))
+                    {
+                    string filesLink =  orgLinks["self"].uri.TrimEnd("/".ToCharArray()) + "/files";
+
                     if (fetchNewFiles) //only fetch files when we are wanting to download
                     {
-                        p.SharedFiles = getPartnerFileLinks(orgLinks["files"].uri, p.FromOrg.id, fetchNewFiles);
+                        p.SharedFiles = await getPartnerFileLinks(filesLink, p.FromOrg.id, fetchNewFiles);
 
                         if (p.SharedFiles != null)
                             p.TotalFileCount = p.SharedFiles.Count();
-                    }                   
+                    }
                     else
                     {
-                        p.TotalFileCount = getCount<DataContracts.File>(orgLinks["files"].uri);
-                    }                    
+                        p.TotalFileCount = await getCount<DataContracts.File>(filesLink);
+                    }
+                    }
                 }
             }
         }
 
-        private CollectionPage<T> fetchResources<T>(string path) where T : DataContracts.Resource
+        private async Task<CollectionPage<T>> fetchResources<T>(string path) where T : DataContracts.Resource
         {
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
+            var response = await SecuredApiGetRequest(path);
+
+            Logger.Log("RESOURCE", "fetchResources");
+            Logger.Log(response);
+            CollectionPageDeserializer ds = new CollectionPageDeserializer();
+
+            CollectionPage<T> resources = null;
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            if (!string.IsNullOrEmpty(content))
             {
-                Path = path
-            };
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Logger.Log("RESOURCE", "fetchResources");
-                Logger.Log(response);
-                CollectionPageDeserializer ds = new CollectionPageDeserializer();
-
-                CollectionPage<T> resources = null;
-
-                if (!string.IsNullOrEmpty(response.Content))
-                {
-                    resources = ds.deserialize<T>(response.Content);
-                }
-
-                return resources;
+                resources = ds.deserialize<T>(content);
             }
+
+            return resources;
+
         }
 
-        private CollectionPage<T> fetchNewResourcesWithETag<T>(string path, ref string tag) where T : DataContracts.Resource
+        private async Task<TagCollection<T>> fetchNewResourcesWithETag<T>(string path, string tag) where T : DataContracts.Resource
         {
-            
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = path
-            };
-             
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-            request.AddHeader("x-deere-signature", string.IsNullOrEmpty(tag) ? " " : tag);
+          
             Logger.Log("RESOURCE", "fetchNewResourcesWithETag");
-            using (Hammock.RestResponse response = client.Request(request))
+
+            var response = await SecuredApiGetRequest(path, true, tag);
+
+            Logger.Log(response);
+            CollectionPageDeserializer ds = new CollectionPageDeserializer();
+
+            //CollectionPage<T> resources = null;
+
+            TagCollection<T> tagCollection = new TagCollection<T>();
+            tagCollection.Tag = tag;
+            tagCollection.CollectionPage = null;
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.Forbidden)
             {
-                Logger.Log(response);
-                CollectionPageDeserializer ds = new CollectionPageDeserializer();
-
-                CollectionPage<T> resources = null;
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
-                {
-                    return resources;
-                }
-                else if (!string.IsNullOrEmpty(response.Content))
-                {
-                    tag = response.Headers["x-deere-signature"];
-                    resources = ds.deserialize<T>(response.Content);
-                }
-
-                return resources;
+                return tagCollection;
             }
+            if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
+            {
+                return tagCollection;
+            }
+            else if (!string.IsNullOrEmpty(content))
+            {
+                tagCollection.Tag = response.Headers.GetValues("x-deere-signature").FirstOrDefault();
+                tagCollection.CollectionPage = ds.deserialize<T>(content);
+            }
+
+            return tagCollection;
         }
 
-        private List<TResource> getList<TResource>(string uri) where TResource : DataContracts.Resource
+        private async Task<List<TResource>> getList<TResource>(string uri) where TResource : DataContracts.Resource
         {
             List<TResource> resources = new List<TResource>();
 
             string pageUri = uri;
             do
             {
-                CollectionPage<TResource> pageCollection = fetchResources<TResource>(pageUri);
+                CollectionPage<TResource> pageCollection = await fetchResources<TResource>(pageUri);
 
                 if (pageCollection == null)
                 {
@@ -377,13 +346,13 @@ namespace JdAPI.Client
             return resources;
         }
 
-        private int getCount<TResource>(string uri) where TResource : DataContracts.Resource
+        private async Task<int> getCount<TResource>(string uri) where TResource : DataContracts.Resource
         {
             List<TResource> resources = new List<TResource>();
 
             string pageUri = uri;
 
-            CollectionPage<TResource> pageCollection = fetchResources<TResource>(pageUri);
+            CollectionPage<TResource> pageCollection = await fetchResources<TResource>(pageUri);
 
             if (pageCollection == null)
             {
@@ -393,13 +362,18 @@ namespace JdAPI.Client
             return pageCollection.totalSize;
         }
 
-        private List<TResource> getListWithETag<TResource>(string uri, ref ETag tag) where TResource : DataContracts.Resource
+        private async Task<TagResource<TResource>> getListWithETag<TResource>(string uri, ETag tag) where TResource : DataContracts.Resource
         {
-            List<TResource> resources = new List<TResource>();
+            var tagResource = new TagResource<TResource>();
+            tagResource.Tag = tag.Tag;
+
+            tagResource.Resources = new List<TResource>();
             string pageUri = uri;
             do
             {
-                CollectionPage<TResource> pageCollection = fetchNewResourcesWithETag<TResource>(pageUri, ref tag.Tag);
+                var tagCollection = await fetchNewResourcesWithETag<TResource>(pageUri, tag.Tag);
+                CollectionPage<TResource> pageCollection = tagCollection.CollectionPage;
+                tagResource.Tag = tagCollection.Tag;
 
                 if (pageCollection == null)
                 {
@@ -415,12 +389,12 @@ namespace JdAPI.Client
                             var f = (DataContracts.File) ((object) p);
                             if (f.aType.ToLower() == "file")
                             {
-                                resources.Add(p);
+                                tagResource.Resources.Add(p);
                             }
                         }
                         else
                         {
-                            resources.Add(p);
+                            tagResource.Resources.Add(p);
                         }
                     }
 
@@ -439,7 +413,7 @@ namespace JdAPI.Client
                     break;
                 }
             } while (!string.IsNullOrEmpty(pageUri));
-            return resources;
+            return tagResource;
         }
 
         private string ExtractTokenFromLink(string link)
@@ -448,21 +422,8 @@ namespace JdAPI.Client
             return link.Substring(startIndex);
         }
 
-        private string PostPartnershipRequest(string email, string orgLink)
-        {
-            
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = apiCataloglinks["partnerships"].uri,
-                Method = Hammock.Web.WebMethod.Post
-            };
-            //request.Proxy = "http://localhost:8888";
-
-
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-            request.AddHeader("Content-Type", "application/vnd.deere.axiom.v3+json");
-
+        private async Task<string> PostPartnershipRequest(string email, string orgLink)
+        {                        
             string json =
 @"{
    ""links"": [
@@ -478,86 +439,119 @@ namespace JdAPI.Client
 }";
             json = json.Replace("{Email}", email);
             json = json.Replace("{PartnerUri}", orgLink);
+            var response = await SecuredApiJsonPostRequest(apiCataloglinks["partnerships"].uri, Encoding.UTF8.GetBytes(json));
 
-            request.AddPostContent(Encoding.UTF8.GetBytes(json));
             Logger.Log("RESOURCE", "PostPartnershipRequest");
-            using (Hammock.RestResponse response = client.Request(request))
+
+            Logger.Log(response);
+            if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                Logger.Log(response);
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-                    return response.Headers["Location"];
-                }
-                else
-                {
-                    return "";
-                }
+                return response.Headers.GetValues("Location").FirstOrDefault();
+            }
+            else
+            {
+                return "";
             }
         }
 
-        private bool PostPermissionRequest(string permissionsLink)
+        private async Task<bool> PostPermissionRequest(string permissionsLink)
         {
-
-            Hammock.RestClient client = getRestClient();
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = permissionsLink,
-                Method = Hammock.Web.WebMethod.Post
-            };
-
-            request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-            request.AddHeader("Content-Type", "application/vnd.deere.axiom.v3+json");
 
             string permissionJson =
 @"{
-   ""permissions"": [
+   ""permissions"": [     
       {
-         ""type"": ""productionAgronomicDetailData"",
+         ""type"": ""assetManage"",
+         ""status"": ""requested""
+      },
+      {
+         ""type"": ""viewOnListAndMap"",
+         ""status"": ""requested""
+      },
+      {
+         ""type"": ""viewPeopleAndPreferences"",
+         ""status"": ""requested""
+      },
+      {
+         ""type"": ""makeCSCConnection"",
          ""status"": ""requested""
       }
    ]
-}";
-            request.AddPostContent(Encoding.UTF8.GetBytes(permissionJson));
-            using (Hammock.RestResponse response = client.Request(request))
+}";            
+            
+            var response = await SecuredApiJsonPostRequest(permissionsLink, Encoding.UTF8.GetBytes(permissionJson));
+            Logger.Log(response);
+            if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                Logger.Log(response);
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
+            else
+            {
+                return false;
+            }
+
         }
+
+        private async Task<HttpResponseMessage> SecuredApiGetRequest(string url, bool includeXDeereSig = false, string tag = "")
+        {
+
+            var client = new HttpClient();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.deere.axiom.v3+json"));
+            //client.DefaultRequestHeaders.Add("Accept", "application/vnd.deere.axiom.v3+json");
+
+            if (includeXDeereSig)
+            {
+                client.DefaultRequestHeaders.Add("x-deere-signature", string.IsNullOrEmpty(tag) ? " " : tag);
+            }
+
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCredentials.ACCESS_TOKEN}");
+            var response = await client.GetAsync(url);
+            return response;
+        }
+
+        private async Task<HttpResponseMessage> SecuredApiFileGetRequest(string url)
+        {
+
+            var client = new HttpClient();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/zip"));
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCredentials.ACCESS_TOKEN}");
+            var response = await client.GetAsync(url);
+            return response;
+        }
+
+        private async Task<HttpResponseMessage> SecuredApiJsonPostRequest(string url, byte[] bytes)
+        {
+
+            var client = new HttpClient();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.deere.axiom.v3+json"));
+            
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCredentials.ACCESS_TOKEN}");
+                        
+            var content = new ByteArrayContent(bytes, 0, bytes.Length);
+            content.Headers.Add("Content-Type", "application/vnd.deere.axiom.v3+json");
+            var response = await client.PostAsync(url, content);
+            return response;
+        }
+
         #endregion
 
-        public void retrieveApiCatalog(string endpoint)
+        public async Task retrieveApiCatalog(string endpoint)
         {
 
             apiCataloglinks = (Dictionary<String, Link>)CacheManager.GetCacheItem("api_catalog_links");
 
             if (apiCataloglinks == null)
-            {
+            {             
 
-                Hammock.RestClient client = getRestClient();
-
-                Hammock.RestRequest request = new Hammock.RestRequest()
-                {
-                    Path = endpoint
-                };
-
-                request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-                Logger.Log("RESOURCE", "retrieveAPICatalog");
-                using (Hammock.RestResponse response = client.Request(request))
-                {
-                    Logger.Log(response);
-                    ApiCatalog apiCatalog = PartnershipWorkflow.Deserialise<ApiCatalog>(response.ContentStream);
-                    apiCataloglinks = OAuthWorkFlow.linksFrom(apiCatalog);
-                    CacheManager.AddCacheItem("api_catalog_links", apiCataloglinks, 60 * 6);
-                }
-            }            
+                var response = await SecuredApiGetRequest(endpoint);
+                ApiCatalog apiCatalog = await PartnershipWorkflow.DeserialiseAsync<ApiCatalog>(response.Content);
+                apiCataloglinks = OAuthWorkFlow.linksFrom(apiCatalog);
+                CacheManager.AddCacheItem("api_catalog_links", apiCataloglinks, 60 * 6);
+               
+            }
         }
 
         public void ClearFilesETags()
@@ -596,6 +590,8 @@ namespace JdAPI.Client
         /// <param name="createdTime"></param>
         public void GetOrgETagData(string orgId, ref string eTag, ref DateTime createdTime)
         {
+
+
             if (_organizationFileETags.ContainsKey(orgId))
             {
                 eTag = _organizationFileETags[orgId].Tag;
@@ -607,17 +603,17 @@ namespace JdAPI.Client
             }
         }
 
-        public List<Organization> getMyOrganizations()
+        public async Task<List<Organization>> getMyOrganizations()
         {
-            User currentUser = getCurrentUser(true);
+            User currentUser = await getCurrentUser(true);
             return currentUser.Organizations;
         }
 
-        public List<Partnership> getPartnerships(bool fetchNewFiles, string[] restrictToOrgIds)
+        public async Task<List<Partnership>> getPartnerships(bool fetchNewFiles, string[] restrictToOrgIds)
         {
             List<Partnership> relavantPartnerships = null;
 
-            User currentUser = getCurrentUser(true);
+            User currentUser = await getCurrentUser(true);
 
             //find my organization
             //Organization currentOrg = null;
@@ -627,7 +623,7 @@ namespace JdAPI.Client
                 currentOrg = currentUser.Organizations[0];
             }*/
 
-            List<Partnership> partnerships = getPartnerShipsList(apiCataloglinks["partnerships"].uri);
+            List<Partnership> partnerships = await getPartnerShipsList(apiCataloglinks["partnerships"].uri);
 
             relavantPartnerships = new List<Partnership>();
             foreach (var p in partnerships)
@@ -636,57 +632,51 @@ namespace JdAPI.Client
                 Link fromPartnerShipLink = partnershipLinks["fromPartnership"];
                 Link toPartnerShipLink = partnershipLinks["toPartnership"];
 
-                if (fromPartnerShipLink.uri.ToLower() != toPartnerShipLink.uri.ToLower() 
-                    && currentUser.Organizations.Count(o => toPartnerShipLink.uri.ToLower().IndexOf(o.id.ToLower()) >= 0) >= 0)
+                if (fromPartnerShipLink.uri.ToLower() != toPartnerShipLink.uri.ToLower()
+                    && currentUser.Organizations.Count(o => toPartnerShipLink.uri.ToLower().IndexOf(o.id.ToLower()) >= 0) > 0)
                 {
                     //if a list of org ids is passed in restrict to then apply filter
                     if (restrictToOrgIds == null || restrictToOrgIds.Count() == 0 || restrictToOrgIds.Any(id => fromPartnerShipLink.uri.IndexOf(id) >= 0))
                     {
                         if (!relavantPartnerships.Any(r => OAuthWorkFlow.linksFrom(r)["fromPartnership"].uri == fromPartnerShipLink.uri))
                         {
-                            fillPartnershipTree(p, fetchNewFiles);
-                            relavantPartnerships.Add(p);
+                            await fillPartnershipTree(p, fetchNewFiles);
+
+                            if (p.FromOrg != null && !string.IsNullOrEmpty(p.FromOrg.id))
+                            {
+                                relavantPartnerships.Add(p);
+                            }
                         }
                     }
                 }
+
             }
             //CacheManager.AddCacheItem("partnerships", relavantPartnerships, 5);
 
             return relavantPartnerships;
         }
 
-        public User getCurrentUser(bool fillChildOrgs)
+        public async Task<User> getCurrentUser(bool fillChildOrgs)
         {
             string cacheKey = "current_user_childorgs_" + fillChildOrgs.ToString();
             User currentUser = (User)CacheManager.GetCacheItem(cacheKey);
 
             if (currentUser == null)
-            {
-                Hammock.RestClient client = getRestClient();
-                Hammock.RestRequest request = new Hammock.RestRequest()
+            {              
+                var response = await SecuredApiGetRequest(apiCataloglinks["currentUser"].uri);
+                currentUser = await PartnershipWorkflow.DeserialiseAsync<User>(response.Content);
+                if (fillChildOrgs)
                 {
-                    Path = apiCataloglinks["currentUser"].uri
-                };
-                request.AddHeader("Accept", "application/vnd.deere.axiom.v3+json");
-                Logger.Log("RESOURCE", "getCurrentUser");
-                using (Hammock.RestResponse response = client.Request(request))
-                {
-                    Logger.Log(response);
-                    currentUser = PartnershipWorkflow.Deserialise<User>(response.ContentStream);
-
-                    if (fillChildOrgs)
-                    {
-                        currentUser.Organizations = getList<Organization>(OAuthWorkFlow.linksFrom(currentUser)["organizations"].uri);
-                    }
-                    CacheManager.AddCacheItem(cacheKey, currentUser, 30);
+                    currentUser.Organizations = await getList<Organization>(OAuthWorkFlow.linksFrom(currentUser)["organizations"].uri);
                 }
+                CacheManager.AddCacheItem(cacheKey, currentUser, 30);
             }
             return currentUser;         
         }
         
-        public string RequestPartnerPermissions(string email, string myRequestingOrgId)
+        public async Task<string> RequestPartnerPermissions(string email, string myRequestingOrgId)
         {
-            User currentUser = getCurrentUser(true);
+            User currentUser = await getCurrentUser(true);
 
             //find my organization
             Organization currentOrg = null;
@@ -697,33 +687,29 @@ namespace JdAPI.Client
             }
 
             var orgLink = OAuthWorkFlow.linksFrom(currentOrg)["self"].uri;
-            var partnerLink = PostPartnershipRequest(email, orgLink);            
+            var partnerLink = await PostPartnershipRequest(email, orgLink);            
 
             if (!String.IsNullOrEmpty(partnerLink))
             {             
-                Resource partnership = getPartnership(partnerLink);
+                Resource partnership = await getPartnership(partnerLink);
 
                 //get contact invitation link
                 var links = OAuthWorkFlow.linksFrom(partnership);
                 var contactInviteLink = links["contactInvitation"];
 
-                //result.PartnerLink = links["self"].uri;
-                //var contactInviteToken = ExtractTokenFromLink(contactInviteLink.uri);
-                //result.OrgId = string.Empty;
-                //result.ContactInviteLink = contactInviteLink.uri;
-
-                Resource contactInvite = getPartnership(contactInviteLink.uri);
+              
+                Resource contactInvite = await getPartnership(contactInviteLink.uri);
 
                 partnerLink = contactInviteLink.uri;
 
                 var contactLinks = OAuthWorkFlow.linksFrom(contactInvite);
-                PostPermissionRequest(contactLinks["permissions"].uri);                
+                await PostPermissionRequest(contactLinks["permissions"].uri);                
             }
 
             return partnerLink;        
         }
 
-        public bool downloadFileInPiecesAndComputeMd5(string path, DataContracts.File file)
+        public async Task<bool> downloadFileInPiecesAndComputeMd5(string path, DataContracts.File file)
         {
             //Max file size for download is 16 MB
             long chunkSize = 16 * 1024 * 1024;
@@ -742,7 +728,7 @@ namespace JdAPI.Client
             }
             using (Stream output = System.IO.File.OpenWrite(path + file.name))
             {
-                if (!getChunkFromStartAndRecurse(file, 0, end, file.nativeSize, output))
+                if (!(await getChunkFromStartAndRecurse(file, 0, end, file.nativeSize, output)))
                 {
                     result = false;
                 }
@@ -752,77 +738,67 @@ namespace JdAPI.Client
         }
 
         
-        private bool getChunkFromStartAndRecurse(DataContracts.File file, long start, long chunkSize, long fileSize, Stream output)
+        private async Task<bool> getChunkFromStartAndRecurse(DataContracts.File file, long start, long chunkSize, long fileSize, Stream output)
         {
             bool result = true;
 
             if (fileSize <= chunkSize)
             {
-                result = createDownloadRequest(file, start, fileSize, output);
+                result = await createDownloadRequest(file, start, fileSize, output);
 
                 if (result == false)
                 {
                     System.Threading.Thread.Sleep(1000);   //pause then retry
-                    result = createDownloadRequest(file, start, chunkSize, output);
+                    result = await createDownloadRequest(file, start, chunkSize, output);
                 }
             }
             else
             {
-                result = createDownloadRequest(file, start, chunkSize, output);
+                result = await createDownloadRequest(file, start, chunkSize, output);
 
                 if (result == false)
                 {
                     System.Threading.Thread.Sleep(1000);   //pause then retry
-                    result = createDownloadRequest(file, start, chunkSize, output);
+                    result = await createDownloadRequest(file, start, chunkSize, output);
                 }
 
                 if (result)
                 {
-                    result = getChunkFromStartAndRecurse(file, start + chunkSize, chunkSize, fileSize - chunkSize, output);
+                    result = await getChunkFromStartAndRecurse(file, start + chunkSize, chunkSize, fileSize - chunkSize, output);
                 }
             }
 
             return result;
         }
 
-        private bool createDownloadRequest(DataContracts.File file, long start, long bytesToRead, Stream output)
-        {
-            Hammock.Authentication.OAuth.OAuthCredentials credentials = OAuthWorkFlow.createOAuthCredentials(OAuthType.ProtectedResource, ApiCredentials.TOKEN.token,
-            ApiCredentials.TOKEN.secret, null, null);
-            Hammock.RestClient client = new Hammock.RestClient()
-            {
-                Authority = "",
-                Credentials = credentials
-            };
+        private async Task<bool> createDownloadRequest(DataContracts.File file, long start, long bytesToRead, Stream output)
+        {         
+            var links = OAuthWorkFlow.linksFrom(file);            
 
-            var links = OAuthWorkFlow.linksFrom(file);
+            var url = links["self"].uri;
+            url = url.TrimEnd("?&/".ToCharArray());
+            url = url + "?offset=" + start.ToString() + "&size=" + bytesToRead.ToString();
 
-            Hammock.RestRequest request = new Hammock.RestRequest()
-            {
-                Path = links["self"].uri,
-                Method = Hammock.Web.WebMethod.Get
-            };
-            request.AddHeader("Accept", "application/zip");
-            request.AddParameter("offset", "" + start);
-            request.AddParameter("size", "" + bytesToRead);            
+            var response = await SecuredApiFileGetRequest(url);
+
+                 
             Logger.Log("RESOURCE", "createDownloadRequest");
-            using (Hammock.RestResponse response = client.Request(request))
-            {
-                Logger.Log(response);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            Logger.Log(response);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                using (Stream input = await response.Content.ReadAsStreamAsync())
                 {
-                    using (Stream input = response.ContentStream)
-                    {
-                        input.CopyTo(output);
-                    }
-                    return true;
+                    input.CopyTo(output);
                 }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace JdAPI.Client.Rest
 {
+
+    public class TagCollection<E>
+    {
+        public  string Tag { get; set; }
+        public CollectionPage<E> CollectionPage { get; set; }
+    }
+
     public class CollectionPage<E> : List<E>
     {
         public int totalSize;

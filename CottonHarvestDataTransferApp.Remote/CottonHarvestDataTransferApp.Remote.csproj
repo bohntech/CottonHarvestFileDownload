@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,10 +62,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CottonHarvestDataTransferApp.Interfaces\CottonHarvestDataTransferApp.Data.csproj">
+      <Project>{5547de47-6f1a-4e11-93f0-25475f1bc45f}</Project>
+      <Name>CottonHarvestDataTransferApp.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JdAPI\JdAPI.csproj">
       <Project>{dbc5e31f-f35f-4332-9545-ff5f0bb3d049}</Project>
       <Name>JdAPI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

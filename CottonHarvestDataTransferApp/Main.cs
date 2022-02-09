@@ -48,8 +48,8 @@ namespace CottonHarvestDataTransferApp
         #region private properties                
 
         IRemoteDataRepository remoteDataRepository = (IRemoteDataRepository)new JDRemoteDataRepository();
-        private string oAuthToken = "";
-        private string oAuthSecret = "";
+        private string accessToken = "";
+        private string refreshToken = "";
         private bool _loading = false;
         FirstLaunchForm setupForm = null;
 
@@ -102,18 +102,12 @@ namespace CottonHarvestDataTransferApp
         {
             using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
             {
-                var token = dp.Settings.FindSingle(k => k.Key == SettingKeyType.JDAuthTokenKey);
-                var secret = dp.Settings.FindSingle(k => k.Key == SettingKeyType.JDAuthSecretKey);
-
-                if (token != null && secret != null && !string.IsNullOrWhiteSpace(token.Value) && !string.IsNullOrWhiteSpace(secret.Value))
-                {
-                    oAuthSecret = secret.Value.Trim();
-                    oAuthToken = token.Value.Trim();
-                }
+                accessToken = dp.Settings.GetAsString(SettingKeyType.JDAccessToken);
+                refreshToken = dp.Settings.GetAsString(SettingKeyType.JDRefreshToken);
             }
-
-            remoteDataRepository.Initialize(AppConfig.JohnDeereApiUrl, RemoteProviderType.OAuthProvider, AppConfig.AppId, AppConfig.AppSecret, oAuthToken, oAuthSecret);
-
+            remoteDataRepository.Initialize(AppConfig.JohnDeereApiUrl, AppConfig.JohnDeereWellKnownUrl, RemoteProviderType.OAuthProvider, 
+                DataHelper.SaveNewToken, DataHelper.IsTokenExpired,                
+                AppConfig.AppId, AppConfig.AppSecret, accessToken, refreshToken);
         }
         #endregion
 
@@ -240,7 +234,7 @@ namespace CottonHarvestDataTransferApp
                     downloadFolderSetting = dp.Settings.GetDownloadFolder();
                 }
 
-                if (string.IsNullOrEmpty(oAuthToken) || string.IsNullOrEmpty(oAuthSecret) || string.IsNullOrEmpty(downloadFolderSetting))
+                if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(downloadFolderSetting))
                 {
                     Logger.Log("INFO", "Launching setup form");
                     setupForm = new FirstLaunchForm();                    

@@ -63,6 +63,78 @@ namespace CottonHarvestDataTransferApp.EF
             }           
         }
 
+        public void UpsertSettingWithKey(SettingKeyType key, string value)
+        {
+            var setting = _context.Settings.SingleOrDefault(s => s.Key == key);
+
+            if (setting != null)
+            {
+                setting.Value = value;
+            }
+            else
+            {
+                setting = new Setting();
+                setting.Id = (int)key;
+                setting.Key = key;
+                setting.Value = value;
+                _context.Settings.Add(setting);
+            }
+        }
+
+        public string GetAsString(SettingKeyType key)
+        {
+            var setting = _context.Settings.SingleOrDefault(s => s.Key == key);
+
+            if (setting != null)
+            {
+                return setting.Value;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public DateTime? GetLastJohnDeereLoginDateTime()
+        {
+            var setting = _context.Settings.SingleOrDefault(s => s.Key == SettingKeyType.JDCredentialDateTime);
+
+            if (setting == null)
+                return null;
+            else
+            {
+                DateTime temp;
+                if (DateTime.TryParse(setting.Value, out temp))
+                {
+                    return temp;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public DateTime GetAccessTokenExpiresUTC()
+        {
+            var setting = _context.Settings.SingleOrDefault(s => s.Key == SettingKeyType.JDAccessTokenExpires);
+
+            if (setting == null)
+                return DateTime.UtcNow.AddYears(-1);
+            else
+            {
+                DateTime temp;
+                if (DateTime.TryParse(setting.Value, out temp))
+                {
+                    return temp;
+                }
+                else
+                {
+                    return DateTime.UtcNow.AddYears(-1);
+                }
+            }
+        }
+
 
     }
 }

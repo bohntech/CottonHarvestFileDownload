@@ -15,19 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0F8C1C6781E34976B7DD0F5AE57C190A"
+        "MsmKey" = "8:_07796FC5AD5B7F01611DFF7FC5868E36"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_0F8C1C6781E34976B7DD0F5AE57C190A"
-        "OwnerKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
+        "MsmKey" = "8:_11B433CB9181C086ACCF7B5FAA3A150D"
+        "OwnerKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_13D8DA4EC22E04994E9EC002DDA9BFA7"
+        "MsmKey" = "8:_11B433CB9181C086ACCF7B5FAA3A150D"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -39,43 +39,43 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3CC941373BC453D17832237446A05E57"
+        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3CC941373BC453D17832237446A05E57"
+        "OwnerKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3CC941373BC453D17832237446A05E57"
+        "OwnerKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_438E88E00E8085182B4E8B239C73586F"
+        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_438E88E00E8085182B4E8B239C73586F"
+        "OwnerKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4F6A347F6B7F42AF8B6D2813FE5F5763"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_52836A20C37AC5A4A444AC121596D66F"
-        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_56FAC0C2DCDC4C71F839C941C2F8AA07"
-        "OwnerKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_56FAC0C2DCDC4C71F839C941C2F8AA07"
-        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5BC8C18B141E28E8F3745FCC1265820A"
-        "OwnerKey" = "8:_52836A20C37AC5A4A444AC121596D66F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5BC8C18B141E28E8F3745FCC1265820A"
-        "OwnerKey" = "8:_F87FE46B67E71D4DDE1470D15B28B12B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5BC8C18B141E28E8F3745FCC1265820A"
+        "MsmKey" = "8:_6424FB4E03980B25F88261112140C3E8"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -87,30 +87,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_76E98C029E893663CB0106BB402D0D39"
-        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7C22956B8DEA7805CB631D59AACAFEC6"
-        "OwnerKey" = "8:_0F8C1C6781E34976B7DD0F5AE57C190A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7C22956B8DEA7805CB631D59AACAFEC6"
-        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7C22956B8DEA7805CB631D59AACAFEC6"
-        "OwnerKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_82ECF5E7B7FCED0F7F218D925261E222"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
@@ -118,7 +94,7 @@
         "Entry"
         {
         "MsmKey" = "8:_873E4AFC9504B228573145C4DB9DBD94"
-        "OwnerKey" = "8:_13D8DA4EC22E04994E9EC002DDA9BFA7"
+        "OwnerKey" = "8:_6424FB4E03980B25F88261112140C3E8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -141,31 +117,67 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
+        "OwnerKey" = "8:_C5790ED058A9D830324F7BCF15096937"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
+        "OwnerKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
+        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C5790ED058A9D830324F7BCF15096937"
+        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
+        "OwnerKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
+        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
-        "OwnerKey" = "8:_76E98C029E893663CB0106BB402D0D39"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
+        "MsmKey" = "8:_CD53153487AE6F2EB73F2F4F154065C2"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EDF3E4F09150EB9B1FA63BE6C4BF3B1B"
-        "OwnerKey" = "8:_52836A20C37AC5A4A444AC121596D66F"
+        "MsmKey" = "8:_CD53153487AE6F2EB73F2F4F154065C2"
+        "OwnerKey" = "8:_C5790ED058A9D830324F7BCF15096937"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EDF3E4F09150EB9B1FA63BE6C4BF3B1B"
+        "MsmKey" = "8:_CD53153487AE6F2EB73F2F4F154065C2"
+        "OwnerKey" = "8:_07796FC5AD5B7F01611DFF7FC5868E36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -178,17 +190,29 @@
         "Entry"
         {
         "MsmKey" = "8:_F5219A444CEED8069E0F5BDBDD186D36"
+        "OwnerKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F5219A444CEED8069E0F5BDBDD186D36"
+        "OwnerKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F5219A444CEED8069E0F5BDBDD186D36"
+        "OwnerKey" = "8:_438E88E00E8085182B4E8B239C73586F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F5219A444CEED8069E0F5BDBDD186D36"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F87FE46B67E71D4DDE1470D15B28B12B"
-        "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_CB8616A0B91B4F5EB3BBA8A87A89143E"
         "MsmSig" = "8:_UNDEFINED"
@@ -196,61 +220,61 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F87FE46B67E71D4DDE1470D15B28B12B"
+        "OwnerKey" = "8:_D30799223A552CFB50C9BDC0976023C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_13D8DA4EC22E04994E9EC002DDA9BFA7"
+        "OwnerKey" = "8:_C8496F2DAF499527D8EB5184E8E83F6D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_76E98C029E893663CB0106BB402D0D39"
+        "OwnerKey" = "8:_11B433CB9181C086ACCF7B5FAA3A150D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CD17F488E5F6E144BC27ACCC93257D8C"
+        "OwnerKey" = "8:_438E88E00E8085182B4E8B239C73586F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_56FAC0C2DCDC4C71F839C941C2F8AA07"
+        "OwnerKey" = "8:_C5790ED058A9D830324F7BCF15096937"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0F8C1C6781E34976B7DD0F5AE57C190A"
+        "OwnerKey" = "8:_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7C22956B8DEA7805CB631D59AACAFEC6"
+        "OwnerKey" = "8:_3CC941373BC453D17832237446A05E57"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_52836A20C37AC5A4A444AC121596D66F"
+        "OwnerKey" = "8:_07796FC5AD5B7F01611DFF7FC5868E36"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5BC8C18B141E28E8F3745FCC1265820A"
+        "OwnerKey" = "8:_CD53153487AE6F2EB73F2F4F154065C2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EDF3E4F09150EB9B1FA63BE6C4BF3B1B"
+        "OwnerKey" = "8:_6424FB4E03980B25F88261112140C3E8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -402,20 +426,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0F8C1C6781E34976B7DD0F5AE57C190A"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_07796FC5AD5B7F01611DFF7FC5868E36"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Logger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0F8C1C6781E34976B7DD0F5AE57C190A"
+                    "_07796FC5AD5B7F01611DFF7FC5868E36"
                     {
-                    "Name" = "8:CottonHarvestDataTransferApp.Logger.dll"
+                    "Name" = "8:EntityFramework.SqlServer.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CottonHarvestDataTransferApp.Logger.dll"
+            "SourcePath" = "8:EntityFramework.SqlServer.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -433,20 +457,82 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_13D8DA4EC22E04994E9EC002DDA9BFA7"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_11B433CB9181C086ACCF7B5FAA3A150D"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.IWshRuntimeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Hammock, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_13D8DA4EC22E04994E9EC002DDA9BFA7"
+                    "_11B433CB9181C086ACCF7B5FAA3A150D"
                     {
-                    "Name" = "8:Interop.IWshRuntimeLibrary.dll"
+                    "Name" = "8:Hammock.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Interop.IWshRuntimeLibrary.dll"
+            "SourcePath" = "8:Hammock.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3CC941373BC453D17832237446A05E57"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_3CC941373BC453D17832237446A05E57"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_438E88E00E8085182B4E8B239C73586F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Logger, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_438E88E00E8085182B4E8B239C73586F"
+                    {
+                    "Name" = "8:CottonHarvestDataTransferApp.Logger.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CottonHarvestDataTransferApp.Logger.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -484,82 +570,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_52836A20C37AC5A4A444AC121596D66F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6424FB4E03980B25F88261112140C3E8"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.EF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Interop.IWshRuntimeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_52836A20C37AC5A4A444AC121596D66F"
+                    "_6424FB4E03980B25F88261112140C3E8"
                     {
-                    "Name" = "8:CottonHarvestDataTransferApp.EF.dll"
+                    "Name" = "8:Interop.IWshRuntimeLibrary.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CottonHarvestDataTransferApp.EF.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_56FAC0C2DCDC4C71F839C941C2F8AA07"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_56FAC0C2DCDC4C71F839C941C2F8AA07"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5BC8C18B141E28E8F3745FCC1265820A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_5BC8C18B141E28E8F3745FCC1265820A"
-                    {
-                    "Name" = "8:EntityFramework.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:EntityFramework.dll"
+            "SourcePath" = "8:Interop.IWshRuntimeLibrary.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -591,68 +615,6 @@
                     }
                 }
             "SourcePath" = "8:System.IO.Compression.FileSystem.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_76E98C029E893663CB0106BB402D0D39"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Remote, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_76E98C029E893663CB0106BB402D0D39"
-                    {
-                    "Name" = "8:CottonHarvestDataTransferApp.Remote.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:CottonHarvestDataTransferApp.Remote.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7C22956B8DEA7805CB631D59AACAFEC6"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hammock, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_7C22956B8DEA7805CB631D59AACAFEC6"
-                    {
-                    "Name" = "8:Hammock.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Hammock.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -772,14 +734,76 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CD17F488E5F6E144BC27ACCC93257D8C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:JdAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_CD17F488E5F6E144BC27ACCC93257D8C"
+                    "_ADDB4CD284FFF3A8D73CFFB38B6AF29E"
+                    {
+                    "Name" = "8:CottonHarvestDataTransferApp.Data.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CottonHarvestDataTransferApp.Data.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C5790ED058A9D830324F7BCF15096937"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.EF, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C5790ED058A9D830324F7BCF15096937"
+                    {
+                    "Name" = "8:CottonHarvestDataTransferApp.EF.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CottonHarvestDataTransferApp.EF.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C8496F2DAF499527D8EB5184E8E83F6D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:JdAPI, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C8496F2DAF499527D8EB5184E8E83F6D"
                     {
                     "Name" = "8:JdAPI.dll"
                     "Attributes" = "3:512"
@@ -803,20 +827,51 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EDF3E4F09150EB9B1FA63BE6C4BF3B1B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CD53153487AE6F2EB73F2F4F154065C2"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EDF3E4F09150EB9B1FA63BE6C4BF3B1B"
+                    "_CD53153487AE6F2EB73F2F4F154065C2"
                     {
-                    "Name" = "8:CottonHarvestDataTransferApp.Data.dll"
+                    "Name" = "8:EntityFramework.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CottonHarvestDataTransferApp.Data.dll"
+            "SourcePath" = "8:EntityFramework.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D30799223A552CFB50C9BDC0976023C7"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CottonHarvestDataTransferApp.Remote, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D30799223A552CFB50C9BDC0976023C7"
+                    {
+                    "Name" = "8:CottonHarvestDataTransferApp.Remote.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CottonHarvestDataTransferApp.Remote.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -848,37 +903,6 @@
                     }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F87FE46B67E71D4DDE1470D15B28B12B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F87FE46B67E71D4DDE1470D15B28B12B"
-                    {
-                    "Name" = "8:EntityFramework.SqlServer.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:EntityFramework.SqlServer.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBA24A5EDA7F483196D4D931A50C2176"
@@ -963,15 +987,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cotton Harvest File Download Utility"
-        "ProductCode" = "8:{896DC911-5D40-4F44-9A99-C7A345C91E51}"
-        "PackageCode" = "8:{B90BA0F4-92D9-4CD7-A672-21CEC534918B}"
+        "ProductCode" = "8:{E2E70397-5B1B-442F-90C9-0EE52EDF8BB2}"
+        "PackageCode" = "8:{BE3560CA-C8F0-441C-9BA5-BBFEB4199171}"
         "UpgradeCode" = "8:{5DA1E199-32C0-4CF6-BA6D-4877E97EDFBA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Bohn Technology Solutions, LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1064,6 +1088,86 @@
             {
                 "Keys"
                 {
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5819A13669894A0D86D44570DB0302E7"
+                    {
+                    "Name" = "8:cottonutil"
+                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:TRUE"
+                    "DeleteAtUninstall" = "11:TRUE"
+                    "Transitive" = "11:FALSE"
+                        "Keys"
+                        {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_85E13F5454C5414AB9DF28E25DE88A00"
+                            {
+                            "Name" = "8:shell"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:TRUE"
+                            "DeleteAtUninstall" = "11:TRUE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_36CE5E1456B34084BC0BD7C1CD204B4A"
+                                    {
+                                    "Name" = "8:open"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:TRUE"
+                                    "DeleteAtUninstall" = "11:TRUE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D0F0432A85CE4B57982F61C2919231A0"
+                                            {
+                                            "Name" = "8:command"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:TRUE"
+                                            "DeleteAtUninstall" = "11:TRUE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                }
+                                                "Values"
+                                                {
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_2D6664011DFF464885E4E5643E715C46"
+                                                    {
+                                                    "Name" = "8:"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:\"[TARGETDIR]CottonHarvestDataTransferApp.exe\", \"%1\""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6B63E9C0C1ED492A938F4EB1CA7FD6C5"
+                            {
+                            "Name" = "8:"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:"
+                            }
+                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E90CB720178C430D840561EAA26DE238"
+                            {
+                            "Name" = "8:URL Protocol"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "ValueTypes" = "3:1"
+                            "Value" = "8:"
+                            }
+                        }
+                    }
                 }
             }
             "HKU"

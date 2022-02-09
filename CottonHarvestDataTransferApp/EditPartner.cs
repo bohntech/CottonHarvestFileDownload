@@ -140,6 +140,8 @@ namespace CottonHarvestDataTransferApp
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
+            btnSave.Enabled = false;
+
             string partnerLink = string.Empty;
             string requestingOrgId = (string) cboMyOrg.SelectedValue;
             if (ValidateForm())
@@ -147,18 +149,18 @@ namespace CottonHarvestDataTransferApp
                 //try to initiate permission request
                 if (chkRequestPermission.Checked)
                 {
-                    await Task.Run(() =>
-                    {
+                    //await Task.Run(async () =>
+                    //{
                         try
                         {
-                            partnerLink = remoteRepository.RequestPartnerPermission(tbEmail.Text.Trim(), requestingOrgId);
+                            partnerLink = await remoteRepository.RequestPartnerPermission(tbEmail.Text.Trim(), requestingOrgId);
                         }
                         catch (Exception exc)
                         {
                             Logger.Log(exc);
                             partnerLink = string.Empty;
                         }
-                    });
+                    //});
 
                     if (string.IsNullOrEmpty(partnerLink))
                     {
@@ -213,13 +215,13 @@ namespace CottonHarvestDataTransferApp
         #endregion
 
         #region public methods
-        public void SetRemoteRepository(IRemoteDataRepository repo)
+        public async Task SetRemoteRepository(IRemoteDataRepository repo)
         {
             remoteRepository = repo;
 
             cboMyOrg.DataSource = null;
             cboMyOrg.Items.Clear();            
-            var myOrgs = remoteRepository.GetMyOrganizations();
+            var myOrgs = await remoteRepository.GetMyOrganizations();
             cboMyOrg.DataSource = myOrgs;
             cboMyOrg.DisplayMember = "Name";
             cboMyOrg.ValueMember = "RemoteId";
@@ -227,26 +229,36 @@ namespace CottonHarvestDataTransferApp
 
         public void ShowAdd()
         {
-            orgId = 0;
-            tbOrganization.Text = "";
-            tbEmail.Text = "";
-            chkRequestPermission.Enabled = false;
-            chkRequestPermission.Checked = true;
-            cboMyOrg.SelectedIndex = 0;
-            this.ShowDialog();
+            if (!this.Visible)
+            {
+                orgId = 0;
+                tbOrganization.Text = "";
+                tbEmail.Text = "";
+                chkRequestPermission.Enabled = false;
+                chkRequestPermission.Checked = true;
+                cboMyOrg.SelectedIndex = 0;
+                btnSave.Enabled = true;
+                this.ShowDialog();
+            }
         }
 
         public void ShowEdit(Organization org)
         {
-            tbEmail.Text = org.Email;
-            tbOrganization.Text = org.Name;
-            chkRequestPermission.Enabled = true;
-            chkRequestPermission.Checked = false;
-            cboMyOrg.SelectedValue = org.MyLinkedOrgId;
-            //lblRequestingOrg.Visible = false;
+            if (!this.Visible)
+            {
+                tbEmail.Text = org.Email;
+                tbOrganization.Text = org.Name;
+                chkRequestPermission.Enabled = true;
+                chkRequestPermission.Checked = false;
 
-            orgId = org.Id;
-            this.ShowDialog();
+                if (!string.IsNullOrEmpty(org.MyLinkedOrgId)) {
+                    cboMyOrg.SelectedValue = org.MyLinkedOrgId;
+                }
+                //lblRequestingOrg.Visible = false;
+                orgId = org.Id;
+                btnSave.Enabled = true;
+                this.ShowDialog();
+            }
         }
         #endregion
 

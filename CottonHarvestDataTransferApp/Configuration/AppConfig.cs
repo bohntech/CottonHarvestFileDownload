@@ -48,7 +48,7 @@ namespace CottonHarvestDataTransferApp.Configuration
         {
             get
             {
-                return "[YOUR APP ID HERE]";
+                return "[YOUR APP ID HERE]";             
             }
         }
 
@@ -56,7 +56,23 @@ namespace CottonHarvestDataTransferApp.Configuration
         {
             get
             {
-                return "[YOUR APP SECRET HERE]";
+                return "[YOUR APP SECRET HERE]";                
+            }
+        }
+
+        public static string JohnDeereWellKnownUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["JohnDeere.WellKnownUrl"];
+            }
+        }
+
+        public static string Scopes
+        {
+            get
+            {
+                return "openid profile offline_access org1 org2 files";
             }
         }
     }

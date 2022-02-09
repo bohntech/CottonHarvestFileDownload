@@ -13,13 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CottonHarvestDataTransferAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CottonHarvestDataTransferApp.Remote", "CottonHarvestDataTransferApp.Remote\CottonHarvestDataTransferApp.Remote.csproj", "{EF362442-03AC-431B-89F0-25325886B0A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammock", "Hammock\src\net40\Hammock\Hammock.csproj", "{CD569558-9092-466B-8670-EA1B151150E0}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CottonHarvestDataTransferSetup", "CottonHarvestDataTransferSetup\CottonHarvestDataTransferSetup.vdproj", "{9996E075-423F-4CCE-9F15-25CD2F0E49E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CottonHarvestDataTransferApp.Uninstall", "CottonHarvestDataTransferApp.Uninstall\CottonHarvestDataTransferApp.Uninstall.csproj", "{52F9AC54-F8A8-4683-928E-187426800305}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CottonHarvestDataTransferApp.Logger", "CottonHarvestDataTransferApp.Logger\CottonHarvestDataTransferApp.Logger.csproj", "{30E7A7FF-1E1A-4AA4-8952-EA06A972704A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammock", "Hammock\src\net40\Hammock\Hammock.csproj", "{CD569558-9092-466B-8670-EA1B151150E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,12 +58,6 @@ Global
 		{EF362442-03AC-431B-89F0-25325886B0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF362442-03AC-431B-89F0-25325886B0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF362442-03AC-431B-89F0-25325886B0A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.ClientProfiles|Any CPU.ActiveCfg = ClientProfiles|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.ClientProfiles|Any CPU.Build.0 = ClientProfiles|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD569558-9092-466B-8670-EA1B151150E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9996E075-423F-4CCE-9F15-25CD2F0E49E0}.ClientProfiles|Any CPU.ActiveCfg = Release
 		{9996E075-423F-4CCE-9F15-25CD2F0E49E0}.Debug|Any CPU.ActiveCfg = Debug
 		{9996E075-423F-4CCE-9F15-25CD2F0E49E0}.Release|Any CPU.ActiveCfg = Release
@@ -80,6 +74,12 @@ Global
 		{30E7A7FF-1E1A-4AA4-8952-EA06A972704A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30E7A7FF-1E1A-4AA4-8952-EA06A972704A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30E7A7FF-1E1A-4AA4-8952-EA06A972704A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.ClientProfiles|Any CPU.ActiveCfg = ClientProfiles|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.ClientProfiles|Any CPU.Build.0 = ClientProfiles|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD569558-9092-466B-8670-EA1B151150E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

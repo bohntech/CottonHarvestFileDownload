@@ -36,6 +36,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -76,6 +77,10 @@
     <Content Include="README.TXT" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CottonHarvestDataTransferApp.Interfaces\CottonHarvestDataTransferApp.Data.csproj">
+      <Project>{5547de47-6f1a-4e11-93f0-25475f1bc45f}</Project>
+      <Name>CottonHarvestDataTransferApp.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CottonHarvestDataTransferApp.Logger\CottonHarvestDataTransferApp.Logger.csproj">
       <Project>{30e7a7ff-1e1a-4aa4-8952-ea06a972704a}</Project>
       <Name>CottonHarvestDataTransferApp.Logger</Name>

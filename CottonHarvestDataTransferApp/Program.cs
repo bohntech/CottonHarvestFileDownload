@@ -55,9 +55,27 @@ namespace CottonHarvestDataTransferApp
             AppDomain.CurrentDomain.SetData("DataDirectory", dir.TrimEnd('\\'));
 
             Logger.SetLogPath(dir.TrimEnd('\\'));
+                        
             string[] args = Environment.GetCommandLineArgs();
-            InstanceController controller = new InstanceController();
-            controller.Run(args);            
+
+            string cottonUtilArg = "";
+            foreach (var arg in args)
+            {
+                Logger.Log("ARG", arg);
+                if (arg.ToLower().IndexOf("cottonutil:") >= 0)
+                {
+                    Logger.Log("ARG", "IS CALLBACK");
+                    cottonUtilArg = arg;
+                    System.IO.File.WriteAllText(dir.TrimEnd('\\') + "\\AuthResponse.txt", arg);
+                    return;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(cottonUtilArg))
+            {
+                InstanceController controller = new InstanceController();
+                controller.Run(args);
+            }
         }
     }
 }

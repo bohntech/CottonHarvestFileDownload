@@ -37,6 +37,7 @@ using JdAPI.Client;
 using CottonHarvestDataTransferApp.Data;
 using CottonHarvestDataTransferApp.Configuration;
 using CottonHarvestDataTransferApp.Remote;
+using CottonHarvestDataTransferApp.Helpers;
 
 namespace CottonHarvestDataTransferApp
 {
@@ -108,23 +109,11 @@ namespace CottonHarvestDataTransferApp
         public FirstLaunchForm()
         {
             InitializeComponent();
-
-            string oAuthToken = "";
-            string oAuthSecret = "";
-
-            using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
-            {
-                var token = dp.Settings.FindSingle(k => k.Key == SettingKeyType.JDAuthTokenKey);
-                var secret = dp.Settings.FindSingle(k => k.Key == SettingKeyType.JDAuthSecretKey);
-
-                if (token != null && secret != null && !string.IsNullOrWhiteSpace(token.Value) && !string.IsNullOrWhiteSpace(secret.Value))
-                {
-                    oAuthSecret = secret.Value.Trim();
-                    oAuthToken = token.Value.Trim();
-                }
-            }
-
-            remoteDataRepository.Initialize(AppConfig.JohnDeereApiUrl, RemoteProviderType.OAuthProvider, AppConfig.AppId, AppConfig.AppSecret, oAuthToken, oAuthSecret);
+          
+            remoteDataRepository.Initialize(AppConfig.JohnDeereApiUrl, AppConfig.JohnDeereWellKnownUrl,
+                           RemoteProviderType.OAuthProvider,
+                           DataHelper.SaveNewToken, DataHelper.IsTokenExpired, 
+                           AppConfig.AppId, AppConfig.AppSecret, null, null);
         }
 
         private void connectionSettingsControl_Load(object sender, EventArgs e)

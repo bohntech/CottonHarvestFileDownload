@@ -70,6 +70,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -224,10 +225,6 @@
     <ProjectReference Include="..\CottonHarvestDataTransferApp.Remote\CottonHarvestDataTransferApp.Remote.csproj">
       <Project>{ef362442-03ac-431b-89f0-25325886b0a4}</Project>
       <Name>CottonHarvestDataTransferApp.Remote</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Hammock\src\net40\Hammock\Hammock.csproj">
-      <Project>{cd569558-9092-466b-8670-ea1b151150e0}</Project>
-      <Name>Hammock</Name>
     </ProjectReference>
     <ProjectReference Include="..\JdAPI\JdAPI.csproj">
       <Project>{dbc5e31f-f35f-4332-9545-ff5f0bb3d049}</Project>

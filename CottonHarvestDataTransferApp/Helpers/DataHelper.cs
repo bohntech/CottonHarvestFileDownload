@@ -43,8 +43,39 @@ namespace CottonHarvestDataTransferApp.Helpers
 {
     public enum ImportStatus { REMOTE_FETCH_ERROR = 0, NO_PARTNERS = 1, INVITATION_ERROR = 2, SAVE_ERROR=4, SUCCESS=5 }
 
+    public class ImportPartnerResult
+    {
+        public ImportStatus Status { get; set; }
+        public string Message { get; set; }
+    }
+
     public static class DataHelper
     {
+
+        public static bool IsTokenExpired()
+        {
+            using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
+            {
+                var expiresAt = dp.Settings.GetAccessTokenExpiresUTC();
+                expiresAt = expiresAt.AddMinutes(-10);
+
+                return DateTime.UtcNow > expiresAt;
+            }
+        }
+
+        public static void SaveNewToken(Token token)
+        {
+            using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
+            {
+                dp.Settings.UpsertSettingWithKey(SettingKeyType.JDAccessToken, token.access_token);
+                dp.Settings.UpsertSettingWithKey(SettingKeyType.JDAccessTokenExpires, DateTime.UtcNow.AddSeconds(token.expires_in).ToString());
+                dp.Settings.UpsertSettingWithKey(SettingKeyType.JDRefreshToken, token.refresh_token);
+                dp.Settings.UpsertSettingWithKey(SettingKeyType.JDCredentialDateTime, DateTime.UtcNow.ToString());
+                dp.SaveChanges();
+            }
+        }
+
+
         /// <summary>
         /// This helper method handles the import of partners.
         /// </summary>
@@ -53,9 +84,10 @@ namespace CottonHarvestDataTransferApp.Helpers
         /// <param name="remoteDataRepository">repository instance to access the remote datasource</param>
         /// <param name="addNew"></param>
         /// <returns></returns>
-        public static ImportStatus ImportPartners(List<Partner> results, ref string displayMessage, IRemoteDataRepository remoteDataRepository, bool addNew)
+        public static async Task<ImportPartnerResult> ImportPartners(List<Partner> results, IRemoteDataRepository remoteDataRepository, bool addNew)
         {
             results = null;
+            ImportPartnerResult result = new ImportPartnerResult();
             try
             {
                 using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
@@ -64,21 +96,23 @@ namespace CottonHarvestDataTransferApp.Helpers
 
                     //passing null for eTags results in only total file count being fetched
                     //instead of downloading files when filing the partner object tree
-                    results = remoteDataRepository.FetchAllPartners(null, (addNew) ? null : orgIds);
+                    results = await remoteDataRepository.FetchAllPartners(null, (addNew) ? null : orgIds);
                 }
             }
             catch (Exception fetchExc)
             {
-                displayMessage = "An error occurred fetching partner data.";
-                Logger.Log("MESSAGE", displayMessage);
+                result.Message = "An error occurred fetching partner data.";
+                Logger.Log("MESSAGE", result.Message);
                 Logger.Log(fetchExc);
-                return ImportStatus.REMOTE_FETCH_ERROR;
+                result.Status = ImportStatus.REMOTE_FETCH_ERROR;
+                return result;
             }
 
             if (results == null || results.Count() == 0)
             {
-                displayMessage = "No partners found.";
-                return ImportStatus.REMOTE_FETCH_ERROR;
+                result.Message = "No partners found.";
+                result.Status = ImportStatus.REMOTE_FETCH_ERROR;
+                return result;
             }
 
             using (IUnitOfWorkDataProvider dp = AppStorage.GetUnitOfWorkDataProvider())
@@ -89,7 +123,7 @@ namespace CottonHarvestDataTransferApp.Helpers
                     {
                         if (string.IsNullOrEmpty(p.RemoteID) && !string.IsNullOrEmpty(p.PartnerLink))
                         {
-                            p.RemoteID = remoteDataRepository.GetRemoteIDFromPartnerLink(p.PartnerLink);
+                            p.RemoteID = await remoteDataRepository.GetRemoteIDFromPartnerLink(p.PartnerLink);
                             dp.Organizations.Update(p);
                         }
                     }
@@ -97,10 +131,11 @@ namespace CottonHarvestDataTransferApp.Helpers
                 }
                 catch (Exception exc)
                 {                    
-                    displayMessage = "An error occurred checking status of pending partner invitations.";
-                    Logger.Log("MESSAGE", displayMessage);
+                    result.Message = "An error occurred checking status of pending partner invitations.";
+                    Logger.Log("MESSAGE", result.Message);
                     Logger.Log(exc);
-                    return ImportStatus.REMOTE_FETCH_ERROR;
+                    result.Status = ImportStatus.REMOTE_FETCH_ERROR;
+                    return result;
                 }
 
                 try
@@ -152,13 +187,16 @@ namespace CottonHarvestDataTransferApp.Helpers
                 }
                 catch (Exception exc)
                 {
-                    displayMessage = "An error occurred saving partners. " + exc.Message;
-                    Logger.Log("MESSAGE", displayMessage);
+                    result.Message = "An error occurred saving partners. " + exc.Message;
+                    Logger.Log("MESSAGE", result.Message);
                     Logger.Log(exc);
-                    return ImportStatus.SAVE_ERROR;
+                    result.Status = ImportStatus.SAVE_ERROR;
+                    return result;
                 }
             }
-            return ImportStatus.SUCCESS;
+            result.Status = ImportStatus.SUCCESS;
+            result.Message = "";
+            return result;
         }
     }
 }

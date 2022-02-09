@@ -28,6 +28,11 @@ using System.Text;
 using System.Threading.Tasks;
 using JdAPI.Client;
 using CottonHarvestDataTransferApp.Remote.Data;
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using CottonHarvestDataTransferApp.Data;
 
 namespace CottonHarvestDataTransferApp.Remote
 {
@@ -43,6 +48,86 @@ namespace CottonHarvestDataTransferApp.Remote
 
         protected string _endpoint = "";
 
+        protected string _wellKnown = "";
+
+        protected TokenRefreshHandler _refreshHandler = null;
+
+        protected TokenExpiredCheckHandler _expireCheckHandler = null;
+
+        protected bool IsTokenExpired()
+        {
+            return true;
+
+            /*if (_expireCheckHandler != null)
+            {
+                return _expireCheckHandler();
+            }
+            else
+            {
+                return false;
+            }*/
+        }
+
+        private async Task<Dictionary<string, object>> GetOAuthMetadata()
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(_wellKnown);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var oAuthMetadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseContent);
+            return oAuthMetadata;
+        }
+
+        private string GetBase64EncodedClientCredentials()
+        {
+            byte[] credentialBytes = Encoding.UTF8.GetBytes($"{ApiCredentials.APP_ID}:{ApiCredentials.APP_KEY}");
+            return Convert.ToBase64String(credentialBytes);
+        }
+
+        protected async Task DoTokenCheck()
+        {
+
+            if (IsTokenExpired())
+            {
+                Dictionary<string, object> oAuthMetadata = await GetOAuthMetadata();
+                string tokenEndpoint = oAuthMetadata["token_endpoint"].ToString();
+
+                var queryParameters = new Dictionary<string, string>();
+                queryParameters.Add("grant_type", "refresh_token");
+                queryParameters.Add("refresh_token", ApiCredentials.REFRESH_TOKEN);
+                queryParameters.Add("redirect_uri", "cottonutil://localhost/callback");
+
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("authorization", $"Basic {GetBase64EncodedClientCredentials()}");
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint)
+                {
+                    Content = new FormUrlEncodedContent(queryParameters)
+                };
+
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var token = JsonConvert.DeserializeObject<Token>(responseContent);
+
+                    ApiCredentials.ACCESS_TOKEN = token.access_token;
+                    ApiCredentials.REFRESH_TOKEN = token.refresh_token;
+
+                    if (_refreshHandler != null)
+                    {
+                        _refreshHandler(token);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Initializes connection information for the repository.  Should
         /// always be called before any other methods.
@@ -53,80 +138,58 @@ namespace CottonHarvestDataTransferApp.Remote
         /// <param name="clientAppSecret">App secret</param>
         /// <param name="clientAuthToken">May be blank, but if blank auth token should be retrieved and set using SetAuthData before other calls are made.</param>
         /// <param name="clientAuthSecret">May be blank, but if blank auth secret should be retrieved and set using SetAuthData before other calls are made.</param>
-        public void Initialize(string endpoint, RemoteProviderType providerType, string clientAppKey = "",
-            string clientAppSecret = "", string clientAuthToken = "", string clientAuthSecret = "")
+        public void Initialize(string endpoint, string wellknown, RemoteProviderType providerType, TokenRefreshHandler refreshHandler, TokenExpiredCheckHandler expireHandler, string clientAppKey = "",
+            string clientAppSecret = "", string accessToken = "", string refreshToken = "")
         {
             _endpoint = endpoint;
+            _wellKnown = wellknown;
 
-            ApiCredentials.CLIENT.key = clientAppKey;
-            ApiCredentials.CLIENT.secret = clientAppSecret;
-            ApiCredentials.TOKEN.token = clientAuthToken;
-            ApiCredentials.TOKEN.secret = clientAuthSecret;
+            _refreshHandler = refreshHandler;
+            _expireCheckHandler = expireHandler;
+
+            ApiCredentials.APP_ID = clientAppKey;
+            ApiCredentials.APP_KEY = clientAppSecret;
+            ApiCredentials.ACCESS_TOKEN = accessToken;
+            ApiCredentials.REFRESH_TOKEN = refreshToken;
         }
+
+        public void SetTokenRefreshHandler(TokenRefreshHandler handler)
+        {
+            _refreshHandler = handler;
+        }
+
+        public void SetTokenExpiredHandler(TokenExpiredCheckHandler handler)
+        {
+            _expireCheckHandler = handler;
+        }
+
+
 
         /// <summary>
         /// Sets client specific token and secret
         /// </summary>
         /// <param name="authToken"></param>
         /// <param name="authSecret"></param>
-        public void SetAuthData(string authToken, string authSecret)
+        public void SetAuthData(string accessToken, string refreshToken)
         {
-            ApiCredentials.TOKEN.token = authToken;
-            ApiCredentials.TOKEN.secret = authSecret;
+            ApiCredentials.ACCESS_TOKEN = accessToken;
+            ApiCredentials.REFRESH_TOKEN = refreshToken;
         }
-
-        /// <summary>
-        /// Gets a URL to be opened in a web browser for OOB verification.
-        /// </summary>
-        /// <returns></returns>
-        public string GetManualAuthUrl()
-        {
-            try
-            {
-                _of.retrieveApiCatalogToEstablishOAuthProviderDetails(_endpoint);
-                _of.getRequestToken();
-                return _of.AuthUri;
-            }
-            catch (Exception exc)
-            {
-                int i = 0;
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Exchanges the verifier token for auth token
-        /// </summary>
-        /// <param name="verifier"></param>
-        /// <param name="authToken"></param>
-        /// <param name="authSecret"></param>
-        /// <returns></returns>
-        public bool ExchangeVerifierForCredentials(string verifier, ref string authToken, ref string authSecret)
-        {
-            _of.SetVerifier(verifier.Trim());
-
-            if (_of.exchangeRequestTokenForAccessToken(ref authToken, ref authSecret))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+               
 
         /// <summary>
         /// Makes a test call to the API to see if a request can be
         /// completed without errors to verify the connection.
         /// </summary>
         /// <returns></returns>
-        public string TestConnection()
+        public async Task<string> TestConnection()
         {
             try
             {
+                await DoTokenCheck();
                 PartnershipWorkflow workflow = new PartnershipWorkflow();
-                workflow.retrieveApiCatalog(_endpoint);
-                var user = workflow.getCurrentUser(false);
+                await workflow.retrieveApiCatalog(_endpoint);
+                var user = await workflow.getCurrentUser(false);
                 //workflow.getUserOrganizations();
                 return user.accountName;
             }
@@ -137,10 +200,12 @@ namespace CottonHarvestDataTransferApp.Remote
         }
 
 
-        public List<Partner> FetchAllPartners(List<OrgFileETag> fileETags, string[] restrictToOrgIds)
+        public async Task<List<Partner>> FetchAllPartners(List<OrgFileETag> fileETags, string[] restrictToOrgIds)
         {
+            await DoTokenCheck();
+
             PartnershipWorkflow workflow = new PartnershipWorkflow();
-            workflow.retrieveApiCatalog(_endpoint);
+            await workflow.retrieveApiCatalog(_endpoint);
             workflow.ClearFilesETags();
 
             if (fileETags != null)
@@ -152,24 +217,27 @@ namespace CottonHarvestDataTransferApp.Remote
             }
 
             bool fetchNewFiles = (fileETags != null);
-            var jdPartnerships = workflow.getPartnerships(fetchNewFiles, restrictToOrgIds);
+            var jdPartnerships = await workflow.getPartnerships(fetchNewFiles, restrictToOrgIds);
             List<Partner> results = new List<Partner>();
             foreach (var p in jdPartnerships)
             {
-                Partner dataPartner = new Partner();
-                dataPartner.Id = p.FromOrg.id;
-                dataPartner.Name = p.FromOrg.name;
-                dataPartner.MyLinkedOrgId = p.ToOrg.id;
-                //dataPartner.PermissionGranted = (p.Permissions != null) ? p.Permissions.Any(x => x.status == "approved" && x.type == "productionAgronomicDetailData") : false;
-                dataPartner.SharedFileCount = p.TotalFileCount; // (p.SharedFiles != null) ? p.SharedFiles.Count(x => x.archived.ToLower() == "false") : 0;
-                dataPartner.PartnershipLink = p.links.Single(l => l.rel == "self").uri;
+                if (!string.IsNullOrEmpty(p.FromOrg.id))
+                {
+                    Partner dataPartner = new Partner();
+                    dataPartner.Id = p.FromOrg.id;
+                    dataPartner.Name = p.FromOrg.name;
+                    dataPartner.MyLinkedOrgId = p.ToOrg.id;
+                    //dataPartner.PermissionGranted = (p.Permissions != null) ? p.Permissions.Any(x => x.status == "approved" && x.type == "productionAgronomicDetailData") : false;
+                    dataPartner.SharedFileCount = p.TotalFileCount; // (p.SharedFiles != null) ? p.SharedFiles.Count(x => x.archived.ToLower() == "false") : 0;
+                    dataPartner.PartnershipLink = p.links.Single(l => l.rel == "self").uri;
 
-                string fileETag = "";
-                DateTime tagTime = DateTime.Now;
-                workflow.GetOrgETagData(p.FromOrg.id, ref fileETag, ref tagTime);
-                dataPartner.FileETag = fileETag;
-                dataPartner.FilesETagCreatedDate = tagTime;
-                results.Add(dataPartner);
+                    string fileETag = "";
+                    DateTime tagTime = DateTime.Now;
+                    workflow.GetOrgETagData(p.FromOrg.id, ref fileETag, ref tagTime);
+                    dataPartner.FileETag = fileETag;
+                    dataPartner.FilesETagCreatedDate = tagTime;
+                    results.Add(dataPartner);
+                }
             }
             return results;
         }
@@ -180,12 +248,13 @@ namespace CottonHarvestDataTransferApp.Remote
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public string RequestPartnerPermission(string email, string myOrgId)
+        public async Task<string> RequestPartnerPermission(string email, string myOrgId)
         {
-            PartnershipWorkflow p = new PartnershipWorkflow();
-            p.retrieveApiCatalog(_endpoint);
-            var pLink = p.RequestPartnerPermissions(email, myOrgId);
+            await DoTokenCheck();
 
+            PartnershipWorkflow p = new PartnershipWorkflow();
+            await p.retrieveApiCatalog(_endpoint);
+            var pLink = await p.RequestPartnerPermissions(email, myOrgId);
             return pLink;
         }
 
@@ -194,11 +263,12 @@ namespace CottonHarvestDataTransferApp.Remote
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        public string GetRemoteIDFromPartnerLink(string link)
+        public async Task<string> GetRemoteIDFromPartnerLink(string link)
         {
+            await DoTokenCheck(); 
             PartnershipWorkflow up = new PartnershipWorkflow();
-            up.retrieveApiCatalog(_endpoint);
-            return up.getOrgIdForCompletedPartnership(link);
+            await up.retrieveApiCatalog(_endpoint);
+            return await up.getOrgIdForCompletedPartnership(link);
         }
 
         /// <summary>
@@ -220,12 +290,13 @@ namespace CottonHarvestDataTransferApp.Remote
         /// <param name="progressCallback">Executed to update progress</param>
         /// <param name="errorCallback">Executed when a download error occurs</param>
         /// <returns></returns>
-        public List<OrgFileETag> DownloadOrganizationFiles(List<OrgFileETag> fileETags, string filePath, string[] orgIds, string[] downloadedFileIds, Action<FileDownloadedResult> callback, Action<FileDownloadProgress> progressCallback, Action<FileDownloadedResult> errorCallback)
+        public async Task<List<OrgFileETag>> DownloadOrganizationFiles(List<OrgFileETag> fileETags, string filePath, string[] orgIds, string[] downloadedFileIds, Action<FileDownloadedResult> callback, Action<FileDownloadProgress> progressCallback, Action<FileDownloadedResult> errorCallback)
         {
+            await DoTokenCheck(); 
             List<OrgFileETag> newETags = new List<OrgFileETag>();
             List<OrgFileETag> failedETags = new List<OrgFileETag>();
             PartnershipWorkflow p = new PartnershipWorkflow();
-            p.retrieveApiCatalog(_endpoint);
+            await p.retrieveApiCatalog(_endpoint);
             p.ClearFilesETags();
 
             if (fileETags != null)
@@ -238,7 +309,7 @@ namespace CottonHarvestDataTransferApp.Remote
 
             bool fetchNewFiles = (fileETags != null);
 
-            var partnerships = p.getPartnerships(fetchNewFiles, orgIds);
+            var partnerships = await p.getPartnerships(fetchNewFiles, orgIds);
             
             FileDownloadProgress progressResult = new FileDownloadProgress();
             progressResult.CurrentFile = 1;
@@ -269,7 +340,7 @@ namespace CottonHarvestDataTransferApp.Remote
 
                         progressCallback(progressResult);
 
-                        if (!p.downloadFileInPiecesAndComputeMd5(partnerFilePath, file))
+                        if (!(await p.downloadFileInPiecesAndComputeMd5(partnerFilePath, file)))
                         {
                             var originalETag = fileETags.SingleOrDefault(f => f.OrgId == partner.FromOrg.id);
 
@@ -310,13 +381,14 @@ namespace CottonHarvestDataTransferApp.Remote
             return newETags;
         }
 
-        public List<UserOrganization> GetMyOrganizations()
+        public async Task<List<UserOrganization>> GetMyOrganizations()
         {
+            await DoTokenCheck(); 
             PartnershipWorkflow p = new PartnershipWorkflow();            
-            p.retrieveApiCatalog(_endpoint);
+            await p.retrieveApiCatalog(_endpoint);
 
             List<UserOrganization> userOrgs = new List<UserOrganization>();
-            foreach(var org in p.getMyOrganizations())
+            foreach(var org in await p.getMyOrganizations())
             {
                 userOrgs.Add(new UserOrganization { Name = org.name, RemoteId = org.id });
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JdAPI.Client.Rest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,11 @@ namespace JdAPI.DataContracts
     {
         public DateTime CreatedDate;
         public string Tag;
+    }
+
+    public class TagResource<TResource>
+    {
+        public string Tag { get; set; }
+        public List<TResource> Resources { get; set; }
     }
 }
